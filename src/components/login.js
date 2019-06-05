@@ -6,10 +6,9 @@ class Login extends Component {
     constructor() {
         super();
         this.state = {
-            firstName: "",
-            lastName: "",
             email: "",
-            password: ""
+            password: "",
+            error: ""
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,7 +19,7 @@ class Login extends Component {
     }
 
     handleSubmit(e) {
-        // e.preventDefault();
+        e.preventDefault();
         axios
             .post("/login", {
                 email: this.state.email,
@@ -29,8 +28,10 @@ class Login extends Component {
             .then(results => {
                 if (results.data.error) {
                     this.setState({
-                        error: "Something went wrong! Please try again!"
+                        error: results.data.error
                     });
+                } else if (results.data.userId) {
+                    location.href = "/";
                 }
             })
             .catch(function(err) {
@@ -64,6 +65,7 @@ class Login extends Component {
                     </label>
                 </div>
                 <button type="submit">Submit</button>
+                <p className="errorMsg">{this.state.error}</p>
             </form>
         );
     }

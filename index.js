@@ -55,13 +55,15 @@ app.post("/register", function(req, res) {
         .then(hash => {
             db.addUsers(firstName, lastName, email, hash)
                 .then(results => {
-                    console.log("results of inserting", results);
                     req.session.usersId = results.rows[0].id;
                     res.json({ userId: results.rows[0].id });
-                    // res.redirect("/profile");
                 })
                 .catch(err => {
-                    res.json({ error: true });
+                    if (err.code == 23505) {
+                        res.json({ error: 23505 });
+                    } else {
+                        res.json({ error: true });
+                    }
                     console.log("Error at addUsers query -->", err);
                 });
         })
@@ -72,6 +74,8 @@ app.post("/register", function(req, res) {
 });
 
 app.post("/login", (req, res) => {
+    console.log("req. body for login", req.body);
+
     var email = req.body.email;
     var password = req.body.password;
     db.login(email)
@@ -80,20 +84,25 @@ app.post("/login", (req, res) => {
                 .then(doesMatch => {
                     if (doesMatch) {
                         req.session.usersId = match.rows[0].id;
+                        res.json({ userId: match.rows[0].id });
                     } else {
-                        res.json({ error: true });
+                        res.json({ error: "Password incorrect!" });
                     }
                 })
                 .catch(err => {
                     console.log("Error at checkPassword query ->", err);
-                    res.json({ error: true });
+                    res.json({ error: "Error with password!" });
                 });
         })
         .catch(err => {
+            res.json({ error: "e-Mail not found!" });
             console.log("Error at login query ->", err);
-            res.json({ error: true });
         });
 });
+
+// if there is a session id, then redirect to the APP
+// if theres no session id, then redirect to welcome
+// do one app.get with the welcome (?) and one with any addrss "*"
 
 app.listen(8080, function() {
     console.log("I'm listening.");

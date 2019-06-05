@@ -1,7 +1,9 @@
 const spicedPg = require("spiced-pg");
+///////////////// this communicates with the local or the web sql database and has to be
+///////////////// specified for each project
 const dbUrl =
     process.env.DATABASE_URL ||
-    `postgres:postgres:postgres@localhost:5432/salt-petition`;
+    `postgres:postgres:postgres@localhost:5432/salt-socialnetwork`;
 var db = spicedPg(dbUrl);
 
 /////////////////////////////////////////////////////////////////////////

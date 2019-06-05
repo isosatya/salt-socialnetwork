@@ -21,7 +21,7 @@ class Registration extends Component {
     }
 
     handleSubmit(e) {
-        // e.preventDefault();
+        e.preventDefault();
         axios
             .post("/register", {
                 firstName: this.state.firstName,
@@ -30,10 +30,16 @@ class Registration extends Component {
                 password: this.state.password
             })
             .then(results => {
-                if (results.data.error) {
+                if (results.data.error == 23505) {
                     this.setState({
-                        error: "Something went wrong! Please try again!"
+                        error: "e-Mail already registered!"
                     });
+                } else if (results.data.error) {
+                    this.setState({
+                        error: "Something went wrong, please try again!"
+                    });
+                } else if (results.data.userId) {
+                    location.href = "/";
                 }
             })
             .catch(function(err) {
@@ -90,7 +96,7 @@ class Registration extends Component {
                 </div>
                 <button type="submit">Submit</button>
                 <p className="errorMsg">{this.state.error}</p>
-                <Link to="/login">Click here to Log in!</Link>
+                <Link to="/login">Login!</Link>
             </form>
         );
     }
