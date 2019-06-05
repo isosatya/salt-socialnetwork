@@ -1,0 +1,23 @@
+@import url("https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Luckiest+Guy&display=swap");
+
+.mainLogo {
+    font-family: "Luckiest Guy", cursive;
+}
+
+#pawLogo {
+    width: 100px;
+    height: 100px;
+}
+
+.logoParag {
+    font-family: "Gloria Hallelujah", cursive;
+}
+
+.formField {
+}
+
+.errorMsg {
+    color: red;
+    font-family: "Arial";
+    font-style: oblique;
+}
