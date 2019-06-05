@@ -40,8 +40,23 @@ if (process.env.NODE_ENV != "production") {
 
 //////////////////////////////////////////////   Routes
 
+app.get("/welcome", function(req, res) {
+    console.log("req.session.usersId", req.session.usersId);
+    if (req.session.usersId) {
+        res.redirect("/");
+    } else {
+        res.sendFile(__dirname + "/index.html");
+    }
+});
+
 app.get("*", function(req, res) {
-    res.sendFile(__dirname + "/index.html");
+    console.log("req.session.usersId", req.session.usersId);
+
+    if (!req.session.usersId) {
+        res.redirect("/welcome");
+    } else {
+        res.sendFile(__dirname + "/index.html");
+    }
 });
 
 app.post("/register", function(req, res) {
@@ -91,7 +106,6 @@ app.post("/login", (req, res) => {
                 })
                 .catch(err => {
                     console.log("Error at checkPassword query ->", err);
-                    res.json({ error: "Error with password!" });
                 });
         })
         .catch(err => {
