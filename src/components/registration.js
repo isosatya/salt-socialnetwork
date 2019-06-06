@@ -6,8 +6,8 @@ class Registration extends Component {
     constructor() {
         super();
         this.state = {
-            firstName: "",
-            lastName: "",
+            first: "",
+            last: "",
             email: "",
             password: "",
             error: ""
@@ -24,8 +24,8 @@ class Registration extends Component {
         e.preventDefault();
         axios
             .post("/register", {
-                firstName: this.state.firstName,
-                lastName: this.state.lastName,
+                first: this.state.first,
+                last: this.state.last,
                 email: this.state.email,
                 password: this.state.password
             })
@@ -54,9 +54,9 @@ class Registration extends Component {
                     <label>
                         Name:
                         <input
-                            name="firstName"
+                            name="first"
                             className="formField"
-                            value={this.state.firstName}
+                            value={this.state.first}
                             onChange={this.handleChange}
                         />
                     </label>
@@ -65,9 +65,9 @@ class Registration extends Component {
                     <label>
                         Surname
                         <input
-                            name="lastName"
+                            name="last"
                             className="formField"
-                            value={this.state.lastName}
+                            value={this.state.last}
                             onChange={this.handleChange}
                         />
                     </label>

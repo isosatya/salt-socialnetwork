@@ -36,3 +36,10 @@ location.href 	or 	location.replace("/")	to redirect on the client side
 
 
 
+UPDATE users
+SET imgUrl = null
+WHERE id=1;
+
+
+
+/Users/Andres/Desktop/salt-imageboard/s3.js
