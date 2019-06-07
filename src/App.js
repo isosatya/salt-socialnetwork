@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { HashRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Link } from "react-router-dom";
 import axios from "axios";
 import Welcome_logo from "./components/welcome_logo";
 import Profile from "./components/profile";
 import Uploader from "./components/uploader";
+///////////// this one is for using HOOKS
+import { useState, useEffect } from "react";
 
 class App extends Component {
     constructor(props) {
@@ -19,9 +22,7 @@ class App extends Component {
     componentDidMount() {
         axios.get("/user").then(results => {
             this.setState(results.data[0]);
-            console.log("results of user data", results.data[0]);
         });
-        console.log("user data", this.state);
     }
 
     toggleUploader() {
@@ -59,32 +60,34 @@ class App extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log("i clicked on submit");
-
-        // axios.post("/updatebio", { bio: this.state.bio });
+        axios.post("/updatebio", { bio: this.state.bio });
     }
 
     render() {
         return (
             <div>
-                <Welcome_logo />
-                <Profile
-                    first={this.state.first}
-                    last={this.state.last}
-                    email={this.state.email}
-                    bio={this.state.bio}
-                    imgurl={this.state.imgurl}
-                    created_at={this.state.created_at}
-                    toggle={this.toggleUploader}
-                    handleChange={this.handleChange}
-                    handleSubmit={this.handleSubmit}
-                />
-                {this.state.uploader && (
-                    <Uploader
-                        toggle={this.toggleUploader}
-                        upload={this.uploadPic}
-                        file={this.handleFileChange}
-                    />
+                {this.state.first && (
+                    <div>
+                        <Welcome_logo />
+                        <Profile
+                            first={this.state.first}
+                            last={this.state.last}
+                            email={this.state.email}
+                            bio={this.state.bio}
+                            imgurl={this.state.imgurl}
+                            created_at={this.state.created_at}
+                            toggle={this.toggleUploader}
+                            handleChange={this.handleChange}
+                            handleSubmit={this.handleSubmit}
+                        />
+                        {this.state.uploader && (
+                            <Uploader
+                                toggle={this.toggleUploader}
+                                upload={this.uploadPic}
+                                file={this.handleFileChange}
+                            />
+                        )}
+                    </div>
                 )}
             </div>
         );

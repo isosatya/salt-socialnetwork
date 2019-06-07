@@ -24,12 +24,13 @@ class BioEditor extends Component {
     render() {
         return (
             <div>
-                {this.props.bio == null && (
+                {this.props.bio == "" && (
                     <button onClick={this.editViewMode}>Add Bio</button>
                 )}
-                {this.props.bio != null && (
-                    <button onClick={this.editViewMode}>Edit bio</button>
-                )}
+                {this.props.bio != null &&
+                    (this.props.bio != "" && (
+                        <button onClick={this.editViewMode}>Edit bio</button>
+                    ))}
                 {this.state.editable == true && (
                     <div>
                         <textarea

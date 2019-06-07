@@ -18,6 +18,9 @@ class Profile extends Component {
                     imgurl={this.props.imgurl}
                     toggle={this.props.toggle}
                 />
+                <div>
+                    {this.props.first} {this.props.last}
+                </div>
                 <BioEditor
                     bio={this.props.bio}
                     handleChange={this.props.handleChange}

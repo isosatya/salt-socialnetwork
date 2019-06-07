@@ -70,8 +70,6 @@ if (process.env.NODE_ENV != "production") {
 //////////////////////////////////////////////   Routes
 
 app.post("/register", function(req, res) {
-    console.log("req.body", req.body);
-
     var first = req.body.first;
     var last = req.body.last;
     var email = req.body.email;
@@ -145,7 +143,11 @@ app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
 });
 
 app.post("/updatebio", (req, res) => {
-    console.log("req.body", req.body);
+    var id = req.session.usersId;
+    var bio = req.body.bio;
+    db.updateBio(id, bio)
+        .then(response => res.json(response))
+        .catch(err => console.log("Error at the updateBio query", err));
 });
 
 app.get("/welcome", function(req, res) {

@@ -36,3 +36,18 @@ location.href 	or 	location.replace("/")	to redirect on the client side
 
 ###### #################
 
+when the user just typed in, the prop is going to be empty/undefined, so just show  three recent users.
+
+After user has already typed in after some characters, then make the query to search (after first render of recent users). use here use-effect
+
+we should get an array as the result of this query. we have to then transform this list of object to DOM elements (use map() method). Dont forget ot use "key"
+
+check this shit hidding data as html: 
+
+<div key={user.id}>
+  <Link to={""/user/${user.id}"}>{user.first} {user.last} <Link/> 
+  
+</div>
+
+<div contenteditable="plaintext-only"><div key={user.id}>   <Link to={""/user/${user.id}"}>{user.first} {user.last} <Link/>     </div></div>```<div key={user.id}>``  <Link to={""/user/${user.id}"}>{user.first} {user.last} <Link/> ``  ``</div>`
+
