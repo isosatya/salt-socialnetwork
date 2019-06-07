@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { HashRouter, Route } from "react-router-dom";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 import axios from "axios";
 import Welcome_logo from "./components/welcome_logo";
 import Profile from "./components/profile";
+import OtherProfile from "./components/otherProfile";
 import Uploader from "./components/uploader";
 ///////////// this one is for using HOOKS
 import { useState, useEffect } from "react";
@@ -69,17 +69,37 @@ class App extends Component {
                 {this.state.first && (
                     <div>
                         <Welcome_logo />
-                        <Profile
-                            first={this.state.first}
-                            last={this.state.last}
-                            email={this.state.email}
-                            bio={this.state.bio}
-                            imgurl={this.state.imgurl}
-                            created_at={this.state.created_at}
-                            toggle={this.toggleUploader}
-                            handleChange={this.handleChange}
-                            handleSubmit={this.handleSubmit}
-                        />
+                        <BrowserRouter>
+                            <div>
+                                <Route
+                                    exact
+                                    path="/"
+                                    render={() => (
+                                        <Profile
+                                            first={this.state.first}
+                                            last={this.state.last}
+                                            email={this.state.email}
+                                            bio={this.state.bio}
+                                            imgurl={this.state.imgurl}
+                                            created_at={this.state.created_at}
+                                            toggle={this.toggleUploader}
+                                            handleChange={this.handleChange}
+                                            handleSubmit={this.handleSubmit}
+                                        />
+                                    )}
+                                />
+                                <Route
+                                    path="/user/:id"
+                                    render={props => (
+                                        <OtherProfile
+                                            key={props.match.url}
+                                            match={props.match}
+                                            history={props.history}
+                                        />
+                                    )}
+                                />
+                            </div>
+                        </BrowserRouter>
                         {this.state.uploader && (
                             <Uploader
                                 toggle={this.toggleUploader}

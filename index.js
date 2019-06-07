@@ -132,6 +132,25 @@ app.get("/user", (req, res) => {
         });
 });
 
+app.get("/otheruser/:id", (req, res) => {
+    const id = req.params.id;
+    if (id == req.session.usersId) {
+        res.json({ error: 1 });
+    } else {
+        db.getUserInfo(id)
+            .then(results => {
+                if (results.rows.length == 0) {
+                    res.json({ error: 2 });
+                } else {
+                    res.json(results.rows);
+                }
+            })
+            .catch(err => {
+                console.log("Error at the getUserInfo Query", err);
+            });
+    }
+});
+
 app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
     var url = urlPrefx + req.file.filename;
     var id = req.session.usersId;
