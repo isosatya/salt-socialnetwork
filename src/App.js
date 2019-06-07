@@ -12,12 +12,16 @@ class App extends Component {
         this.toggleUploader = this.toggleUploader.bind(this);
         this.uploadPic = this.uploadPic.bind(this);
         this.handleFileChange = this.handleFileChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
         axios.get("/user").then(results => {
             this.setState(results.data[0]);
+            console.log("results of user data", results.data[0]);
         });
+        console.log("user data", this.state);
     }
 
     toggleUploader() {
@@ -49,6 +53,17 @@ class App extends Component {
             });
     }
 
+    handleChange(e) {
+        this.setState({ bio: e.target.value });
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        console.log("i clicked on submit");
+
+        // axios.post("/updatebio", { bio: this.state.bio });
+    }
+
     render() {
         return (
             <div>
@@ -61,9 +76,12 @@ class App extends Component {
                     imgurl={this.state.imgurl}
                     created_at={this.state.created_at}
                     toggle={this.toggleUploader}
+                    handleChange={this.handleChange}
+                    handleSubmit={this.handleSubmit}
                 />
                 {this.state.uploader && (
                     <Uploader
+                        toggle={this.toggleUploader}
                         upload={this.uploadPic}
                         file={this.handleFileChange}
                     />

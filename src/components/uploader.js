@@ -9,7 +9,8 @@ class Uploader extends Component {
         return (
             <div>
                 <div className="boxUploader">
-                    <h3>Upload the image you would like for your Profile</h3>
+                    <p onClick={this.props.toggle}>X</p>
+                    <h3>Fancy changing your profile picture?</h3>
                     <input
                         type="file"
                         name="file"

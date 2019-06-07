@@ -69,16 +69,6 @@ if (process.env.NODE_ENV != "production") {
 
 //////////////////////////////////////////////   Routes
 
-app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
-    var url = urlPrefx + req.file.filename;
-    var id = req.session.usersId;
-    db.updateProfilePic(id, url)
-        .then(() => {
-            res.json(url);
-        })
-        .catch(err => console.log("Error at UpdateProfilePic", err));
-});
-
 app.post("/register", function(req, res) {
     console.log("req.body", req.body);
 
@@ -142,6 +132,20 @@ app.get("/user", (req, res) => {
         .catch(err => {
             console.log("Error at the getUserInfo Query", err);
         });
+});
+
+app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
+    var url = urlPrefx + req.file.filename;
+    var id = req.session.usersId;
+    db.updateProfilePic(id, url)
+        .then(() => {
+            res.json(url);
+        })
+        .catch(err => console.log("Error at UpdateProfilePic", err));
+});
+
+app.post("/updatebio", (req, res) => {
+    console.log("req.body", req.body);
 });
 
 app.get("/welcome", function(req, res) {

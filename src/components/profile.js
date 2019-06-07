@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 // import { HashRouter, Route } from "react-router-dom";
 import ProfilePic from "./profilePic";
+import BioEditor from "./bioEditor";
 
 class Profile extends Component {
     constructor(props) {
@@ -16,6 +17,11 @@ class Profile extends Component {
                     last={this.props.last}
                     imgurl={this.props.imgurl}
                     toggle={this.props.toggle}
+                />
+                <BioEditor
+                    bio={this.props.bio}
+                    handleChange={this.props.handleChange}
+                    handleSubmit={this.props.handleSubmit}
                 />
             </div>
         );

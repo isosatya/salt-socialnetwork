@@ -54,3 +54,14 @@ module.exports.updateProfilePic = function updateProfilePic(id, url) {
         [id, url]
     );
 };
+
+module.exports.updateBio = function updateBio(id, text) {
+    return db.query(
+        `
+        UPDATE users 
+        SET bio = $2 
+        WHERE id = $1;
+        `,
+        [id, text]
+    );
+};
