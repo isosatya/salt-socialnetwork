@@ -24,10 +24,15 @@ class BioEditor extends Component {
     render() {
         return (
             <div>
-                {this.props.bio == "" ||
-                    (this.props.bio == null && (
-                        <button onClick={this.editViewMode}>Add Bio</button>
-                    ))}
+                {(() => {
+                    if (this.props.bio == "" || this.props.bio == null) {
+                        return (
+                            <button onClick={this.editViewMode}>Add Bio</button>
+                        );
+                    } else {
+                        return null;
+                    }
+                })()}
                 {this.props.bio != null &&
                     (this.props.bio != "" && (
                         <button onClick={this.editViewMode}>Edit bio</button>
