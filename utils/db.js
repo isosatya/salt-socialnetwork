@@ -65,3 +65,21 @@ module.exports.updateBio = function updateBio(id, text) {
         [id, text]
     );
 };
+
+module.exports.recentUsers = function recentUsers() {
+    return db.query(
+        `
+        SELECT * FROM users
+        ORDER by created_at DESC
+        LIMIT 3;
+        `
+    );
+};
+
+module.exports.userSearch = function userSearch(param) {
+    return db.query(
+        `SELECT * FROM users 
+    WHERE first ILIKE $1;`,
+        [param + "%"]
+    );
+};

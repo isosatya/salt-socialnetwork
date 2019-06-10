@@ -25,18 +25,14 @@ class OtherProfile extends Component {
         return (
             <div>
                 <div>
-                    <img
-                        className="profilePic"
-                        src={
-                            this.state.imgurl
-                                ? this.state.imgurl
-                                : "./uglydog.jpg"
-                        }
-                        alt={this.state.first + " " + this.state.last}
+                    <ProfilePic
+                        first={this.state.first}
+                        last={this.state.last}
+                        imgurl={this.state.imgurl}
                     />
                 </div>
                 <div>
-                    {this.props.first} {this.props.last}
+                    {this.state.first} {this.state.last}
                 </div>
                 <div>
                     <p>{this.state.bio}</p>

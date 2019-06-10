@@ -5,6 +5,7 @@ import Welcome_logo from "./components/welcome_logo";
 import Profile from "./components/profile";
 import OtherProfile from "./components/otherProfile";
 import Uploader from "./components/uploader";
+import FindPeople from "./components/findPeople";
 ///////////// this one is for using HOOKS
 import { useState, useEffect } from "react";
 
@@ -97,6 +98,10 @@ class App extends Component {
                                             history={props.history}
                                         />
                                     )}
+                                />
+                                <Route
+                                    path="/users"
+                                    render={props => <FindPeople />}
                                 />
                             </div>
                         </BrowserRouter>

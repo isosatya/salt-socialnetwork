@@ -151,6 +151,33 @@ app.get("/otheruser/:id", (req, res) => {
     }
 });
 
+app.get("/users/recent", (req, res) => {
+    db.recentUsers()
+        .then(results => {
+            res.json(results.rows);
+        })
+        .catch(err => {
+            console.log("Error at the recentUsers query", err);
+        });
+});
+
+app.get("/users/:val", (req, res) => {
+    const val = req.params.val;
+    // console.log("parameter for search", val);
+    db.userSearch(val)
+        .then(results => {
+            if (results.rows.length == 0) {
+                res.json({ error: 2 });
+            } else {
+                // console.log("results of search", results.rows);
+                res.json(results.rows);
+            }
+        })
+        .catch(err => {
+            console.log("Error at the userSearch query", err);
+        });
+});
+
 app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
     var url = urlPrefx + req.file.filename;
     var id = req.session.usersId;
