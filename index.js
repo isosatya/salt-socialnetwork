@@ -122,6 +122,18 @@ app.post("/login", (req, res) => {
         });
 });
 
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/");
+});
+
+app.get("/delete", (req, res) => {
+    db.deleteUser(req.session.usersId).then(() => {
+        req.session = null;
+        res.redirect("/");
+    });
+});
+
 app.get("/user", (req, res) => {
     db.getUserInfo(req.session.usersId)
         .then(results => {

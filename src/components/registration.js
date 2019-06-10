@@ -49,54 +49,52 @@ class Registration extends Component {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <div>
-                    <label>
-                        Name:
-                        <input
-                            name="first"
-                            className="formField"
-                            value={this.state.first}
-                            onChange={this.handleChange}
-                        />
-                    </label>
+            <form onSubmit={this.handleSubmit} className="formBody">
+                <div className="formElement">
+                    <label className="label">Name:</label>
+                    <input
+                        name="first"
+                        className="formField"
+                        value={this.state.first}
+                        onChange={this.handleChange}
+                    />
                 </div>
-                <div>
-                    <label>
-                        Surname
-                        <input
-                            name="last"
-                            className="formField"
-                            value={this.state.last}
-                            onChange={this.handleChange}
-                        />
-                    </label>
+                <div className="formElement">
+                    <label className="label">Surname</label>
+                    <input
+                        name="last"
+                        className="formField"
+                        value={this.state.last}
+                        onChange={this.handleChange}
+                    />
                 </div>
-                <div>
-                    <label>
-                        e-Mail
-                        <input
-                            name="email"
-                            className="formField"
-                            value={this.state.email}
-                            onChange={this.handleChange}
-                        />
-                    </label>
+                <div className="formElement">
+                    <label className="label">e-Mail</label>
+                    <input
+                        name="email"
+                        className="formField"
+                        value={this.state.email}
+                        onChange={this.handleChange}
+                    />
                 </div>
-                <div>
-                    <label>
-                        Password
-                        <input
-                            name="password"
-                            className="formField"
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                        />
-                    </label>
+                <div className="formElement">
+                    <label className="label">Password</label>
+                    <input
+                        name="password"
+                        className="formField"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                    />
                 </div>
-                <button type="submit">Submit</button>
-                <p className="errorMsg">{this.state.error}</p>
-                <Link to="/login">Login!</Link>
+                <div className="buttonContainer">
+                    <p className="errorMsg">{this.state.error}</p>
+                    <button type="submit" className="submitButton">
+                        Submit
+                    </button>
+                    <Link to="/login" className="loginLink">
+                        Login!
+                    </Link>
+                </div>
             </form>
         );
     }

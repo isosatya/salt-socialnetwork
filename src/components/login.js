@@ -41,31 +41,31 @@ class Login extends Component {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <div>
-                    <label>
-                        e-Mail
-                        <input
-                            name="email"
-                            className="formField"
-                            value={this.state.email}
-                            onChange={this.handleChange}
-                        />
-                    </label>
+            <form onSubmit={this.handleSubmit} className="formBody">
+                <div className="formElement">
+                    <label className="label">e-Mail</label>
+                    <input
+                        name="email"
+                        className="formField"
+                        value={this.state.email}
+                        onChange={this.handleChange}
+                    />
                 </div>
-                <div>
-                    <label>
-                        Password
-                        <input
-                            name="password"
-                            className="formField"
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                        />
-                    </label>
+                <div className="formElement">
+                    <label className="label">Password</label>
+                    <input
+                        name="password"
+                        className="formField"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                    />
                 </div>
-                <button type="submit">Submit</button>
-                <p className="errorMsg">{this.state.error}</p>
+                <div className="buttonContainer">
+                    <button type="submit" className="submitButton">
+                        Login
+                    </button>
+                    <p className="errorMsg">{this.state.error}</p>
+                </div>
             </form>
         );
     }

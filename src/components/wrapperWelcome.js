@@ -6,14 +6,18 @@ import Login from "./login";
 
 function Wrapper() {
     return (
-        <div>
-            <Welcome_logo />
-            <HashRouter>
-                <div>
-                    <Route exact path="/" component={Registration} />
-                    <Route path="/login" component={Login} />
-                </div>
-            </HashRouter>
+        <div className="wrapperCont">
+            <div className="wrapperLogo">
+                <Welcome_logo />
+            </div>
+            <div className="registLoginMasks">
+                <HashRouter>
+                    <div>
+                        <Route exact path="/" component={Registration} />
+                        <Route path="/login" component={Login} />
+                    </div>
+                </HashRouter>
+            </div>
         </div>
     );
 }

@@ -24,6 +24,16 @@ module.exports.addUsers = function addUsers(
     );
 };
 
+module.exports.deleteUser = function deleteUser(id) {
+    return db.query(
+        `
+        DELETE FROM users
+        WHERE id = $1
+        `,
+        [id]
+    );
+};
+
 module.exports.login = function login(logEmail) {
     return db.query(
         `SELECT id, email, password 

@@ -1,30 +1,215 @@
 @import url("https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Luckiest+Guy&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+HK&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Acme&display=swap");
+
+/* Celeste     #a9eee6
+Crema       #fefaec
+Rojo        #f38181
+Marron      #625772 */
+
+body {
+    margin: 0;
+}
+
+/* ///////////////////////////////// Wrapper login and register masks */
+
+.wrapperCont {
+    display: inline-flex;
+    height: 100vh;
+    align-items: center;
+    background: #a9eee6;
+    margin: 0;
+}
+
+.wrapperLogo {
+    width: 50vw;
+    height: auto;
+}
+
+.registLoginMasks {
+    width: 50vw;
+    height: auto;
+}
+
+/* ///////////////////////////////// Main logo for register and login masks */
 
 .mainLogo {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.textLogo {
     font-family: "Luckiest Guy", cursive;
+    font-size: 50px;
+    height: auto;
+    width: 500px;
+    margin: 0;
+}
+#gang {
+    text-align: right;
 }
 
 #pawLogo {
-    width: 100px;
-    height: 100px;
+    width: 300px;
+    height: 300px;
 }
 
-.logoParag {
+#paragLogo {
     font-family: "Gloria Hallelujah", cursive;
+    align-self: flex-end;
+}
+
+/* ///////////////////////////////// Login and registration masks */
+
+.formBody {
+    margin-left: 120px;
+}
+
+.formElement {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 250px;
+    margin: 10px;
+}
+
+.label {
+    width: 100px;
+    font-family: "Noto Sans HK", sans-serif;
 }
 
 .formField {
+    background: #e1f9f6;
+    width: 180px;
+    border: transparent;
+    border-radius: 5px;
+    height: 25px;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+}
+
+.submitButton {
+    font-family: "Noto Sans HK", sans-serif;
+    font-weight: bolder;
+    height: auto;
+    width: 80px;
+    margin: 5px;
+}
+
+.loginLink {
+    font-family: "Noto Sans HK", sans-serif;
+    margin: 5px;
+    text-decoration: none;
 }
 
 .errorMsg {
     color: red;
     font-family: "Arial";
     font-style: oblique;
+    margin: 0;
+    padding: 0;
+}
+
+/* ///////////////////////////////// Header */
+
+.headerContainer {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: #a9eee6;
+    width: 100vw;
+    height: 170px;
+}
+
+.headerLogo {
+    margin-left: 10px;
+    margin-top: 10px;
+    height: 140px;
+}
+
+.textHeaderLogo {
+    margin: 5px;
+    width: 100px;
+    font-family: "Luckiest Guy", cursive;
+}
+
+#pawHeaderLogo {
+    height: 100px;
+    width: 100px;
+    margin-left: 10px;
+}
+
+.headerPicContainer {
+    margin-right: 10px;
+
+    width: 130px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.headerPic {
+    height: 100px;
+    width: 100px;
+    border: transparent;
+    border-radius: 50%;
+}
+
+.headerMessage {
+    font-family: "Luckiest Guy", cursive;
+    margin: 5px;
+}
+
+/* ////////////////////////////////// Profile  */
+
+.profileContainer {
+    background: #fefaec;
+    display: inline-flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    width: 100vw;
+    height: 75vh;
+}
+
+.profilePicContainer {
+    width: 27vw;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #f38181;
+    border: transparent;
+    border-radius: 10px;
+    margin-right: 25px;
 }
 
 .profilePic {
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: auto;
+}
+
+.nameProfPic {
+    font-family: "Acme", sans-serif;
+    font-size: 25px;
+    margin-top: 15px;
+}
+
+.bioContainer {
+    width: 55vw;
+    margin-left: 50px;
 }
 
 .boxUploader {

@@ -6,6 +6,7 @@ import Profile from "./components/profile";
 import OtherProfile from "./components/otherProfile";
 import Uploader from "./components/uploader";
 import FindPeople from "./components/findPeople";
+import Header from "./components/header";
 ///////////// this one is for using HOOKS
 import { useState, useEffect } from "react";
 
@@ -69,7 +70,11 @@ class App extends Component {
             <div>
                 {this.state.first && (
                     <div>
-                        <Welcome_logo />
+                        <Header
+                            first={this.state.first}
+                            last={this.state.last}
+                            imgurl={this.state.imgurl}
+                        />
                         <BrowserRouter>
                             <div>
                                 <Route
