@@ -23,11 +23,16 @@ class BioEditor extends Component {
 
     render() {
         return (
-            <div>
+            <div className="bioInsideContainer">
                 {(() => {
                     if (this.props.bio == "" || this.props.bio == null) {
                         return (
-                            <button onClick={this.editViewMode}>Add Bio</button>
+                            <button
+                                onClick={this.editViewMode}
+                                className="editAddBioButton"
+                            >
+                                Add Bio
+                            </button>
                         );
                     } else {
                         return null;
@@ -35,7 +40,12 @@ class BioEditor extends Component {
                 })()}
                 {this.props.bio != null &&
                     (this.props.bio != "" && (
-                        <button onClick={this.editViewMode}>Edit bio</button>
+                        <button
+                            onClick={this.editViewMode}
+                            className="editAddBioButton"
+                        >
+                            Edit bio
+                        </button>
                     ))}
                 {this.state.editable == true && (
                     <div>
@@ -49,7 +59,7 @@ class BioEditor extends Component {
                     </div>
                 )}
                 {this.state.editable != true && (
-                    <div>
+                    <div className="bioText">
                         <p>{this.props.bio}</p>
                     </div>
                 )}

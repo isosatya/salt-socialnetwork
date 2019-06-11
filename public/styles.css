@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Luckiest+Guy&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Noto+Sans+HK&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Acme&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Acme|Gamja+Flower&display=swap");
 
 /* Celeste     #a9eee6
 Crema       #fefaec
@@ -199,17 +200,58 @@ body {
 .profilePic {
     width: 200px;
     height: auto;
+    margin-top: 15px;
 }
 
 .nameProfPic {
     font-family: "Acme", sans-serif;
+    letter-spacing: 1px;
     font-size: 25px;
     margin-top: 15px;
 }
 
+/* //////////////////////////// Bio text  profile */
+
 .bioContainer {
     width: 55vw;
     margin-left: 50px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bioInsideContainer {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bioText {
+    background: #625772;
+    color: white;
+    font-family: "Gamja Flower", cursive;
+    border: transparent;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 25px;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    margin-top: 25px;
+}
+
+.editAddBioButton {
+}
+
+#deleteProfButton {
+    width: 100px;
+}
+
+#logoutProfButton {
+    width: 100px;
 }
 
 .boxUploader {
