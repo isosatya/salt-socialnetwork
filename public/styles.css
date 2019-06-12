@@ -63,7 +63,7 @@ body {
     align-self: flex-end;
 }
 
-/* ///////////////////////////////// Login and registration masks */
+/* ///////////////////////////////s///////// Login and registration masks */
 
 .formBody {
     margin-left: 120px;
@@ -120,7 +120,7 @@ body {
     padding: 0;
 }
 
-/* ///////////////////////////////// Header */
+/* ////////////////////////////////////////////// Header */
 
 .headerContainer {
     display: inline-flex;
@@ -172,7 +172,7 @@ body {
     margin: 5px;
 }
 
-/* ////////////////////////////////// Profile  */
+/* /////////////////////////////////////////// Profile  */
 
 .profileContainer {
     background: #fefaec;
@@ -210,7 +210,7 @@ body {
     margin-top: 15px;
 }
 
-/* //////////////////////////// Bio text  profile */
+/* ////////////////////////////////////// Bio text  profile */
 
 .bioContainer {
     width: 55vw;
@@ -229,6 +229,23 @@ body {
     align-items: center;
 }
 
+.bioTextContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#bioTextArea {
+    background: #62577296;
+    font-family: "Gamja Flower", cursive;
+    font-size: 20px;
+    width: 630px;
+    height: 166px;
+    border: transparent;
+    border-radius: 10px;
+}
+
 .bioText {
     background: #625772;
     color: white;
@@ -240,19 +257,80 @@ body {
     width: 100%;
     height: auto;
     margin: 0;
-    margin-top: 25px;
 }
 
+#saveBio {
+    width: 100px;
+    font-family: "Noto Sans HK", sans-serif;
+    font-weight: bolder;
+    height: 25px;
+    background: #f38181;
+    margin: 5px;
+    border-radius: 5px;
+    border: transparent;
+}
+
+.otherProfBio {
+    width: 90%;
+}
+
+/* ////////////////////////////////////// Profile buttons */
+
 .editAddBioButton {
+    font-family: "Noto Sans HK", sans-serif;
+    font-weight: bolder;
+    height: 25px;
+    width: 80px;
+    margin: 5px;
+    margin-bottom: 25px;
+    background: #f38181;
+    border-radius: 5px;
+    border: transparent;
+}
+
+.deleteLogContainer {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 94%;
 }
 
 #deleteProfButton {
     width: 100px;
+    font-family: "Noto Sans HK", sans-serif;
+    font-weight: bolder;
+    height: 25px;
+    background: #f38181;
+    margin: 5px;
+    border-radius: 5px;
+    border: transparent;
 }
 
 #logoutProfButton {
     width: 100px;
+    font-family: "Noto Sans HK", sans-serif;
+    font-weight: bolder;
+    height: 25px;
+    background: #f38181;
+    margin: 5px;
+    border-radius: 5px;
+    border: transparent;
 }
+
+#addFriendButton {
+    width: 106px;
+    font-family: "Noto Sans HK", sans-serif;
+    font-weight: bolder;
+    height: 41px;
+    background: #f38181;
+    margin: 5px;
+    margin-top: 31px;
+    border-radius: 5px;
+    border: transparent;
+}
+
+/* /////////////////////////////////////// */
 
 .boxUploader {
     border: solid 5px red;

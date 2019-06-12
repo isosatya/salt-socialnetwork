@@ -89,7 +89,62 @@ module.exports.recentUsers = function recentUsers() {
 module.exports.userSearch = function userSearch(param) {
     return db.query(
         `SELECT * FROM users 
-    WHERE first ILIKE $1;`,
-        [param + "%"]
+        WHERE first ILIKE $1;`,
+        ["%" + param + "%"]
+    );
+};
+
+module.exports.sendFriendReq = function sendFriendReq(senderId, receiverId) {
+    return db.query(
+        `
+        INSERT INTO friendships (sender_id, receiver_id)
+        VALUES ($1, $2)
+        RETURNING *;
+        `,
+        [senderId, receiverId]
+    );
+};
+
+module.exports.cancelFriendship = function cancelFriendship(
+    senderId,
+    receiverId
+) {
+    return db.query(
+        `
+        DELETE FROM friendships
+        WHERE (sender_id = $1 AND receiver_id = $2)
+        OR (sender_id = $2 AND receiver_id = $1)
+        `,
+        [senderId, receiverId]
+    );
+};
+
+module.exports.acceptFriendship = function acceptFriendship(
+    senderId,
+    receiverId
+) {
+    return db.query(
+        `
+        UPDATE friendships 
+        SET accepted = TRUE 
+        WHERE (sender_id = $1 AND receiver_id = $2)
+        OR (sender_id = $2 AND receiver_id = $1)
+        RETURNING *;
+        `,
+        [senderId, receiverId]
+    );
+};
+
+module.exports.searchFriendship = function searchFriendship(
+    senderId,
+    receiverId
+) {
+    return db.query(
+        `
+        SELECT * FROM friendships
+        WHERE (sender_id = $1 AND receiver_id = $2)
+        OR (sender_id = $2 AND receiver_id = $1)
+        `,
+        [senderId, receiverId]
     );
 };

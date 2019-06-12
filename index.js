@@ -175,19 +175,79 @@ app.get("/users/recent", (req, res) => {
 
 app.get("/users/:val", (req, res) => {
     const val = req.params.val;
-    // console.log("parameter for search", val);
-    db.userSearch(val)
-        .then(results => {
-            if (results.rows.length == 0) {
-                res.json({ error: 2 });
-            } else {
-                // console.log("results of search", results.rows);
-                res.json(results.rows);
+    if (val) {
+        db.userSearch(val)
+            .then(results => {
+                if (results.rows.length == 0) {
+                    res.json({ error: 2 });
+                } else {
+                    // console.log("results of search", results.rows);
+                    res.json(results.rows);
+                }
+            })
+            .catch(err => {
+                console.log("Error at the userSearch query", err);
+            });
+    } else {
+        res.redirect("/users/recent");
+    }
+});
+
+app.post("/friendship/:id", (req, res) => {
+    const loggedUserId = req.session.usersId;
+    const receiverId = req.params.id;
+    db.searchFriendship(loggedUserId, receiverId).then(results => {
+        if (results.rows.length == 0) {
+            // No frienship or friendship request
+            res.json({ status: 1 });
+        } else {
+            if (results.rows[0].accepted == false) {
+                // No friendship, but there is friendship request
+                if (loggedUserId == results.rows[0].receiver_id) {
+                    // Request sent by the profile owner
+                    res.json({ status: 2 });
+                } else {
+                    // request received by profile owner
+                    res.json({ status: 3 });
+                }
+            } else if (results.rows[0].accepted == true) {
+                // Unfriend
+                res.json({ status: 4 });
             }
-        })
-        .catch(err => {
-            console.log("Error at the userSearch query", err);
-        });
+        }
+    });
+});
+
+app.post("/sendfriendreq/:id", (req, res) => {
+    const senderId = req.session.usersId;
+    const receiverId = req.params.id;
+    db.sendFriendReq(senderId, receiverId).then(results => {
+        if (results.rows.length != 0) {
+            res.json({ success: true });
+        } else {
+            res.json({ success: "" });
+        }
+    });
+});
+
+app.post("/cancelfriendship/:id", (req, res) => {
+    const senderId = req.session.usersId;
+    const receiverId = req.params.id;
+    db.cancelFriendship(senderId, receiverId).then(() => {
+        res.json({ success: true });
+    });
+});
+
+app.post("/acceptfriendship/:id", (req, res) => {
+    const senderId = req.session.usersId;
+    const receiverId = req.params.id;
+    db.acceptFriendship(senderId, receiverId).then(results => {
+        if (results.rows[0].accepted == true) {
+            res.json({ success: true });
+        } else {
+            res.json({ success: "" });
+        }
+    });
 });
 
 app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {

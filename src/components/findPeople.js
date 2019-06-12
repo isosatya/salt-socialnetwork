@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ProfilePic from "./profilePic";
+import { Link } from "react-router-dom";
 
 function FindPeople() {
     const [search, setSearch] = useState("");
@@ -10,28 +11,19 @@ function FindPeople() {
 
     useEffect(() => {
         (async () => {
-            let results = await axios.get(`/users/recent`);
-            // console.log("results from recent", typeof results.data);
-            // console.log("length of results from recent", results.data);
-            setUsers(results.data);
-        })();
-
-        return () => {
-            (async () => {
+            if (search == "") {
+                let results = await axios.get(`/users/recent`);
+                setUsers(results.data);
+            } else {
+                setError("");
                 let matches = await axios.get(`/users/${search}`);
-                if (error) {
-                    setUsers([]);
+                if (matches.data.error) {
                     setError("User not found!");
                 }
-                console.log("results from search", matches.data);
-                console.log(
-                    "Array.isArry for results from search",
-                    Array.isArray(matches.data)
-                );
-                // setUsers(matches.data);
-            })();
-        };
-    }, [search, setUsers]);
+                setUsers(matches.data);
+            }
+        })();
+    }, [search]);
 
     return (
         <div>
@@ -40,23 +32,26 @@ function FindPeople() {
                 defaultValue={search}
             />
             <div>
-                <p>{error}</p>
-                {users.map(user => (
-                    <React.Fragment key={user.id}>
-                        <div>
-                            <div>
-                                <ProfilePic
-                                    first={user.first}
-                                    last={user.last}
-                                    imgurl={user.imgurl}
-                                />
-                            </div>
-                            <p>
-                                {user.first} {user.last}
-                            </p>
-                        </div>
-                    </React.Fragment>
-                ))}
+                {error && <p className="errorMsg">{error}</p>}
+                {Array.isArray(users) &&
+                    users.map(user => (
+                        <React.Fragment key={user.id}>
+                            <Link to={`/user/${user.id}`}>
+                                <div>
+                                    <div>
+                                        <ProfilePic
+                                            first={user.first}
+                                            last={user.last}
+                                            imgurl={user.imgurl}
+                                        />
+                                    </div>
+                                    <p>
+                                        {user.first} {user.last}
+                                    </p>
+                                </div>
+                            </Link>
+                        </React.Fragment>
+                    ))}
             </div>
         </div>
     );

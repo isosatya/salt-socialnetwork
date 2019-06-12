@@ -45,12 +45,14 @@ class Profile extends Component {
                         handleChange={this.props.handleChange}
                         handleSubmit={this.props.handleSubmit}
                     />
-                    <button onClick={this.delete} id="deleteProfButton">
-                        Delete Profile
-                    </button>
-                    <button onClick={this.logout} id="logoutProfButton">
-                        Logout
-                    </button>
+                    <div className="deleteLogContainer">
+                        <button onClick={this.delete} id="deleteProfButton">
+                            Delete Profile
+                        </button>
+                        <button onClick={this.logout} id="logoutProfButton">
+                            Logout
+                        </button>
+                    </div>
                 </div>
             </div>
         );

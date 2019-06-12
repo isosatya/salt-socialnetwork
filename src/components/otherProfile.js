@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
+import ProfilePic from "./profilePic";
+import FriendButton from "./friendButton";
+// import FriendButton from "./friendButton";
 
 class OtherProfile extends Component {
     constructor(props) {
@@ -23,19 +26,24 @@ class OtherProfile extends Component {
 
     render() {
         return (
-            <div>
-                <div>
+            <div className="profileContainer">
+                <div className="profilePicContainer">
                     <ProfilePic
                         first={this.state.first}
                         last={this.state.last}
                         imgurl={this.state.imgurl}
                     />
+                    <div className="nameProfPic">
+                        {this.state.first} {this.state.last}
+                    </div>
                 </div>
-                <div>
-                    {this.state.first} {this.state.last}
-                </div>
-                <div>
-                    <p>{this.state.bio}</p>
+                <div className="bioContainer">
+                    <div className="bioText otherProfBio">
+                        <p>{this.state.bio}</p>
+                    </div>
+                    <div>
+                        <FriendButton match={this.props.match.params.id} />
+                    </div>
                 </div>
             </div>
         );

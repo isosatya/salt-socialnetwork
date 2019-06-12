@@ -29,7 +29,7 @@ class BioEditor extends Component {
                         return (
                             <button
                                 onClick={this.editViewMode}
-                                className="editAddBioButton"
+                                className="submitButton"
                             >
                                 Add Bio
                             </button>
@@ -48,14 +48,19 @@ class BioEditor extends Component {
                         </button>
                     ))}
                 {this.state.editable == true && (
-                    <div>
-                        <textarea
-                            rows="10"
-                            cols="50"
-                            onChange={this.props.handleChange}
-                            defaultValue={this.props.bio}
-                        />
-                        <button onClick={this.wrapper}>Save</button>
+                    <div className="bioTextContainer">
+                        <div>
+                            <textarea
+                                rows="10"
+                                cols="50"
+                                onChange={this.props.handleChange}
+                                defaultValue={this.props.bio}
+                                id="bioTextArea"
+                            />
+                        </div>
+                        <button id="saveBio" onClick={this.wrapper}>
+                            Save
+                        </button>
                     </div>
                 )}
                 {this.state.editable != true && (

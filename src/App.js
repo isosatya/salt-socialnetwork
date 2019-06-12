@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 import axios from "axios";
-import Welcome_logo from "./components/welcome_logo";
 import Profile from "./components/profile";
 import OtherProfile from "./components/otherProfile";
 import Uploader from "./components/uploader";
 import FindPeople from "./components/findPeople";
 import Header from "./components/header";
+
 ///////////// this one is for using HOOKS
 import { useState, useEffect } from "react";
 
