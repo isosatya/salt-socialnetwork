@@ -12,6 +12,7 @@ function FindPeople() {
     useEffect(() => {
         (async () => {
             if (search == "") {
+                setError("");
                 let results = await axios.get(`/users/recent`);
                 setUsers(results.data);
             } else {
@@ -26,30 +27,36 @@ function FindPeople() {
     }, [search]);
 
     return (
-        <div>
-            <input
-                onChange={e => setSearch(e.target.value)}
-                defaultValue={search}
-            />
+        <div className="findPeopleContainer">
+            <label>
+                Search Users
+                <input
+                    onChange={e => setSearch(e.target.value)}
+                    defaultValue={search}
+                    id="findPeopleField"
+                />
+            </label>
             <div>
                 {error && <p className="errorMsg">{error}</p>}
                 {Array.isArray(users) &&
                     users.map(user => (
                         <React.Fragment key={user.id}>
-                            <Link to={`/user/${user.id}`}>
-                                <div>
+                            <div>
+                                <Link to={`/user/${user.id}`}>
                                     <div>
-                                        <ProfilePic
-                                            first={user.first}
-                                            last={user.last}
-                                            imgurl={user.imgurl}
-                                        />
+                                        <div>
+                                            <ProfilePic
+                                                first={user.first}
+                                                last={user.last}
+                                                imgurl={user.imgurl}
+                                            />
+                                        </div>
+                                        <p>
+                                            {user.first} {user.last}
+                                        </p>
                                     </div>
-                                    <p>
-                                        {user.first} {user.last}
-                                    </p>
-                                </div>
-                            </Link>
+                                </Link>
+                            </div>
                         </React.Fragment>
                     ))}
             </div>

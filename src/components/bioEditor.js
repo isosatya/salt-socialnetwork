@@ -29,7 +29,7 @@ class BioEditor extends Component {
                         return (
                             <button
                                 onClick={this.editViewMode}
-                                className="submitButton"
+                                className="editAddBioButton"
                             >
                                 Add Bio
                             </button>
@@ -65,7 +65,7 @@ class BioEditor extends Component {
                 )}
                 {this.state.editable != true && (
                     <div className="bioText">
-                        <p>{this.props.bio}</p>
+                        <p>{this.props.bio || "No bio added yet..."}</p>
                     </div>
                 )}
             </div>

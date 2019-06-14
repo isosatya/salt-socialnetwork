@@ -1,10 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
-// import { HashRouter, Route } from "react-router-dom";
-// import Welcome_logo from "./components/welcome_logo";
-import Registration from "./components/registration";
 import App from "./App";
 import Wrapper from "./components/wrapperWelcome";
+////////////////////////// part needed for REDUX:
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware } from "redux";
+import reduxPromise from "redux-promise";
+import { composeWithDevTools } from "redux-devtools-extension";
+import reducer from "./components/reducers";
+const store = createStore(
+    reducer,
+    composeWithDevTools(applyMiddleware(reduxPromise))
+);
+///////////////////////// end REDUX
 
 // here i have to do let elem, if location.href = /welcome, then elem = <Registration />
 // if location.href = /, then elem = <App />
@@ -13,12 +21,16 @@ import Wrapper from "./components/wrapperWelcome";
 let Elem;
 
 if (location.pathname == "/welcome") {
-    Elem = Wrapper;
+    Elem = <Wrapper />;
 } else {
-    Elem = App;
+    Elem = (
+        <Provider store={store}>
+            <App />
+        </Provider>
+    );
 }
 
-ReactDOM.render(<Elem />, document.querySelector("main"));
+ReactDOM.render(Elem, document.querySelector("main"));
 
 // function HelloWorld() {
 //     return <div>Hello, World!</div>;

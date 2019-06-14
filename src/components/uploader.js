@@ -7,9 +7,11 @@ class Uploader extends Component {
     }
     render() {
         return (
-            <div>
+            <div className="overlay">
                 <div className="boxUploader">
-                    <p onClick={this.props.toggle}>X</p>
+                    <p id="closeUploader" onClick={this.props.toggle}>
+                        X
+                    </p>
                     <h3>Fancy changing your profile picture?</h3>
                     <input
                         type="file"

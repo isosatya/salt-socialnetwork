@@ -268,6 +268,21 @@ app.post("/updatebio", (req, res) => {
         .catch(err => console.log("Error at the updateBio query", err));
 });
 
+//////////// REDUX example
+
+app.get("/get-list-animals", (req, res) => {
+    let animals = ["dogs", "cats", "otters", "seagulls"];
+    res.json(animals);
+});
+
+app.get("/friendslist", (req, res) => {
+    const id = req.session.usersId;
+    db.getFriendsList(id).then(results => {
+        console.log("results for getFriendsList query", results.rows);
+        res.json(results.rows);
+    });
+});
+
 app.get("/welcome", function(req, res) {
     if (req.session.usersId) {
         res.redirect("/");

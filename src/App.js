@@ -6,9 +6,11 @@ import OtherProfile from "./components/otherProfile";
 import Uploader from "./components/uploader";
 import FindPeople from "./components/findPeople";
 import Header from "./components/header";
+import FriendsList from "./components/friendsList";
+import CuteAnimals from "./components/cuteAnimals.js";
 
 ///////////// this one is for using HOOKS
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 
 class App extends Component {
     constructor(props) {
@@ -107,6 +109,14 @@ class App extends Component {
                                 <Route
                                     path="/users"
                                     render={props => <FindPeople />}
+                                />
+                                <Route
+                                    path="/cute-animals"
+                                    render={props => <CuteAnimals />}
+                                />
+                                <Route
+                                    path="/friends"
+                                    render={props => <FriendsList />}
                                 />
                             </div>
                         </BrowserRouter>
