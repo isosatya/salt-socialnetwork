@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { receiveFriends } from "./actions";
+import { acceptFriendReq } from "./actions";
+import { rejectFriendReq } from "./actions";
+import { cancelFriendship } from "./actions";
 
 class FriendsList extends Component {
     componentDidMount() {
@@ -21,50 +24,86 @@ class FriendsList extends Component {
         return (
             <div>
                 <h1>Pending Invitations</h1>
-                {this.props.wannabes.map(wannabe => (
-                    <div key={wannabe.id}>
-                        <div className="profilePicContainer">
-                            <img
-                                className="profilePic"
-                                src={
-                                    wannabe.imgurl
-                                        ? wannabe.imgurl
-                                        : "./uglydog.jpg"
-                                }
-                                alt={wannabe.first + " " + wannabe.last}
-                            />
-                            <div className="nameProfPic">
-                                {wannabe.first} {wannabe.last}
+                <div className="friendsPageContainer">
+                    {this.props.wannabes.map(wannabe => (
+                        <div key={wannabe.id}>
+                            <div className="profilePicContainer">
+                                <img
+                                    className="profilePic"
+                                    src={
+                                        wannabe.imgurl
+                                            ? wannabe.imgurl
+                                            : "./uglydog.jpg"
+                                    }
+                                    alt={wannabe.first + " " + wannabe.last}
+                                />
+                                <div className="nameProfPic">
+                                    {wannabe.first} {wannabe.last}
+                                </div>
+                            </div>
+                            <div>
+                                <button
+                                    className="addFriendButton friendsPageButton"
+                                    onClick={e =>
+                                        this.props.dispatch(
+                                            rejectFriendReq(wannabe.id)
+                                        )
+                                    }
+                                >
+                                    Reject Friend Request
+                                </button>
+                                <button
+                                    className="addFriendButton friendsPageButton"
+                                    onClick={e =>
+                                        this.props.dispatch(
+                                            acceptFriendReq(wannabe.id)
+                                        )
+                                    }
+                                >
+                                    Accept Friend Request
+                                </button>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
                 <h1>Already Friends</h1>
-                {this.props.friends.map(friend => (
-                    <div key={friend.id}>
-                        <div className="profilePicContainer">
-                            <img
-                                className="profilePic"
-                                src={
-                                    friend.imgurl
-                                        ? friend.imgurl
-                                        : "./uglydog.jpg"
-                                }
-                                alt={friend.first + " " + friend.last}
-                            />
-                            <div className="nameProfPic">
-                                {friend.first} {friend.last}
+                <div className="friendsPageContainer">
+                    {this.props.friends.map(friend => (
+                        <div key={friend.id}>
+                            <div className="profilePicContainer">
+                                <img
+                                    className="profilePic"
+                                    src={
+                                        friend.imgurl
+                                            ? friend.imgurl
+                                            : "./uglydog.jpg"
+                                    }
+                                    alt={friend.first + " " + friend.last}
+                                />
+                                <div className="nameProfPic">
+                                    {friend.first} {friend.last}
+                                </div>
                             </div>
+                            <button
+                                className="addFriendButton friendsPageButton"
+                                onClick={e =>
+                                    this.props.dispatch(
+                                        cancelFriendship(friend.id)
+                                    )
+                                }
+                            >
+                                Unfriend
+                            </button>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         );
     }
 }
 
 const mapStateToProps = state => {
-    console.log("state in map.StateToProps in friendsList component:", state);
+    // console.log("state in map.StateToProps in friendsList component:", state);
 
     return {
         // call this property however you want --> thats the name the props will receive for this component
@@ -78,9 +117,5 @@ const mapStateToProps = state => {
             state.listFriends.filter(wannabe => wannabe.accepted === false)
     };
 };
-
-// .filter(friend => friend.accepted === true)
-
-// const result = words.filter(word => word.length > 6);
 
 export default connect(mapStateToProps)(FriendsList);

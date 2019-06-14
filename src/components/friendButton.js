@@ -59,7 +59,7 @@ function FriendButton(match) {
         <div>
             {error && <p>Something went wrong!</p>}
             <div>
-                <button id="addFriendButton" onClick={UpdateFriendship}>
+                <button className="addFriendButton" onClick={UpdateFriendship}>
                     {button}
                 </button>
             </div>

@@ -187,7 +187,8 @@ body {
 
 .profilePicContainer {
     width: 27vw;
-    height: 400px;
+    min-height: 500px;
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -319,7 +320,7 @@ body {
     border: transparent;
 }
 
-#addFriendButton {
+.addFriendButton {
     width: 106px;
     font-family: "Noto Sans HK", sans-serif;
     font-weight: bolder;
@@ -385,4 +386,13 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.friendsPageButton {
+    background: #a9eee6;
+}
+
+.friendsPageContainer {
+    display: inline-flex;
+    flex-wrap: wrap;
 }

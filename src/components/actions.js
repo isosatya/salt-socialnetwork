@@ -22,3 +22,27 @@ export async function receiveFriends() {
         friendsList: data
     };
 }
+
+export async function acceptFriendReq(id) {
+    const { data } = await axios.post(`/acceptfriendship/${id}`);
+    return {
+        type: "ACCEPT_FRIEND",
+        id
+    };
+}
+
+export async function cancelFriendship(id) {
+    const { data } = await axios.post(`/cancelfriendship/${id}`);
+    return {
+        type: "CANCEL_FRIENDSHIP",
+        id
+    };
+}
+
+export async function rejectFriendReq(id) {
+    const { data } = await axios.post(`/cancelfriendship/${id}`);
+    return {
+        type: "REJECT_FRIEND",
+        id
+    };
+}
