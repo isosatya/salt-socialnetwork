@@ -46,3 +46,17 @@ export async function rejectFriendReq(id) {
         id
     };
 }
+
+export async function chatMessages(msgs) {
+    return {
+        type: "RECENT_CHATS",
+        chats: msgs
+    };
+}
+
+export async function chatMessage(msg) {
+    return {
+        type: "NEW_CHAT",
+        chat: msg
+    };
+}

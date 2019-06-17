@@ -47,6 +47,21 @@ export default function reducer(state = {}, action) {
         };
     }
 
+    if (action.type === "RECENT_CHATS") {
+        return {
+            ...state,
+            chats: action.chats
+        };
+    }
+
+    if (action.type === "NEW_CHAT") {
+        return {
+            ...state,
+            // concat or spread operator
+            chats: [...state.chats, action.chat]
+        };
+    }
+
     // console.log("state at reducer", state);
 
     return state;

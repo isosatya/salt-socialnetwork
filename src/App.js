@@ -7,7 +7,7 @@ import Uploader from "./components/uploader";
 import FindPeople from "./components/findPeople";
 import Header from "./components/header";
 import FriendsList from "./components/friendsList";
-import CuteAnimals from "./components/cuteAnimals.js";
+import Chatting from "./components/chatting";
 
 ///////////// this one is for using HOOKS
 // import { useState, useEffect } from "react";
@@ -111,8 +111,8 @@ class App extends Component {
                                     render={props => <FindPeople />}
                                 />
                                 <Route
-                                    path="/cute-animals"
-                                    render={props => <CuteAnimals />}
+                                    path="/chat"
+                                    render={props => <Chatting />}
                                 />
                                 <Route
                                     path="/friends"

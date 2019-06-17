@@ -162,3 +162,38 @@ module.exports.getFriendsList = function getFriendsList(id) {
         [id]
     );
 };
+
+module.exports.addChatMsg = function addChatMsg(sender_id, text) {
+    return db.query(
+        `
+        INSERT INTO chats (sender_id, text)
+        VALUES ($1, $2)
+        RETURNING id;
+    `,
+        [sender_id, text]
+    );
+};
+
+module.exports.getRecentChats = function getRecentChats() {
+    return db.query(
+        `SELECT *
+        FROM chats
+        ORDER BY id DESC
+        LIMIT 10;`
+    );
+};
+
+module.exports.getChatAndUserInfo = function getChatAndUserInfo(
+    usersid,
+    chatsid
+) {
+    return db.query(
+        `
+    SELECT users.id, first, last, imgUrl, chats.id, text
+    FROM chats
+    JOIN users
+    ON (users.id = $1 AND sender_id = users.id AND chats.id = $2)
+    `,
+        [usersid, chatsid]
+    );
+};

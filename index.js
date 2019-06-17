@@ -7,17 +7,21 @@ const db = require("./utils/db");
 const bc = require("./utils/bc"); // BECRYPT FOR HASHING AND CHECKING PASSWORDS
 var cookieSession = require("cookie-session");
 
-////////////////////// Image upload settings
+////////////////////// SETTINGS FOR SOCKET (CHAT)
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+    origins: "localhost:8080 127.0.0.1:8080/"
+});
+///////////////////////////
 
+//////////////////////////////////////////// Image upload settings
 // const for constructing the url address
 const urlPrefx = "https://s3.amazonaws.com/andres-spiced/";
-
 // This is the module that uploads the image to Amazon
 const s3 = require("./s3");
 var multer = require("multer");
 var uidSafe = require("uid-safe");
 var path = require("path");
-
 // This uploads the image to the local storate
 var diskStorage = multer.diskStorage({
     destination: function(req, file, callback) {
@@ -29,7 +33,6 @@ var diskStorage = multer.diskStorage({
         });
     }
 });
-
 // These are the parameters for the upload
 var uploader = multer({
     storage: diskStorage,
@@ -37,17 +40,25 @@ var uploader = multer({
         fileSize: 2097152
     }
 });
-
-//////////////////////////////////////////////
+//////////////////////////////////////////// Cookie and Socket settings
 
 app.use(cookieParser());
+
+const cookieSessionMiddleware = cookieSession({
+    secret: `I'm always angry.`,
+    maxAge: 1000 * 60 * 60 * 24 * 90
+});
+
+app.use(cookieSessionMiddleware);
+
+io.use(function(socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
+
+////////////////////////////////
+
 app.use(express.static(__dirname + "/public"));
-app.use(
-    cookieSession({
-        secret: `I'm always angry.`,
-        maxAge: 1000 * 60 * 60 * 24 * 14
-    })
-);
+
 app.use(
     bodyParser.urlencoded({
         extended: false
@@ -55,6 +66,8 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(compression());
+
+//////////////////////////////  Bundle Server
 
 if (process.env.NODE_ENV != "production") {
     app.use(
@@ -299,6 +312,47 @@ app.get("*", function(req, res) {
     }
 });
 
-app.listen(8080, function() {
+// We change "app.listen" with "server.listen" so we can use the Socket functionality
+// it's server, not app, that does the listening
+server.listen(8080, function() {
     console.log("I'm listening.");
+});
+
+//////////////////////////////////////// Socket Events
+
+io.on("connection", function(socket) {
+    // console.log(`socket with the id ${socket.id} is now connected`);
+
+    if (!socket.request.session.usersId) {
+        return socket.disconnect(true);
+    }
+    const usersId = socket.request.session.usersId;
+
+    db.getRecentChats().then(results => {
+        console.log("results for the getRecentChats query", results.rows);
+
+        ///// check here if results.rows or something else  ------
+        socket.emit("chatMessages", results.rows);
+    });
+
+    // socket.on("chatMessage", (id, msg) => {
+    //     db.addChatMsg(id, msg).then(results =>
+    //         db.getChatAndUserInfo(usersId, results.rows[0].id).then(results => {
+    //             console.log("db.getChatAndUserInfo results ", results.rows);
+
+    //             // io.sockets.broadcast.emit("chatMessage", { results });
+    //         })
+    //     );
+    // });
+
+    // socket.on("disconnect", function() {
+    //     console.log(`socket with the id ${socket.id} is now disconnected`);
+    // });
+
+    // socket.on("thanks", function(data) {
+    //     console.log(data);
+    // });
+    // socket.emit("welcome", {
+    //     message: "Welome. It is nice to see you"
+    // });
 });
