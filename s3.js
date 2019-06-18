@@ -44,7 +44,7 @@ module.exports.upload = function(req, res, next) {
 
 module.exports.delete = function(images) {
     client.deleteMultiple(images, function(err, res) {
-        console.log("deleted images");
+        console.log("response from amazon", res.statusCode);
     });
 
     // s3Request.on("response", s3Response => {

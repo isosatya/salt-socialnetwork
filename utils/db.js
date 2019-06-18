@@ -221,6 +221,18 @@ module.exports.getPicsUserDatabase = function getPicsUserDatabase(user_id) {
     );
 };
 
+module.exports.deletePicsUserDatabase = function deltePicsUserDatabase(
+    user_id
+) {
+    return db.query(
+        `
+        DELETE FROM pictures
+        WHERE (user_id = $1)
+        `,
+        [user_id]
+    );
+};
+
 module.exports.deleteUserFriendships = function deleteUserFriendships(id) {
     return db.query(
         `

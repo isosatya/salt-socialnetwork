@@ -142,19 +142,22 @@ app.get("/logout", (req, res) => {
 
 app.get("/delete", (req, res) => {
     const user = req.session.usersId;
+    // db.deletePicsUserDatabase(user);
     db.getPicsUserDatabase(user).then(results => {
-        console.log(results.rows);
-        let images = results.rows.map(image => image.imgurl);
-        console.log("images", images);
+        // console.log(results.rows);
+        let images = results.rows.map(image => image.imgurl.slice(39));
+        // console.log("images", images);
         s3.delete(images);
+        db.deletePicsUserDatabase(user).then(() => {
+            db.deleteUserFriendships(user).then(() => {
+                db.deleteUser(user).then(() => {
+                    req.session = null;
+                    res.redirect("/");
+                });
+                // console.log("friendships deleted");
+            });
+        });
     });
-
-    // db.deleteUserFriendships(user).then(() => {
-    //     db.deleteUser(user).then(() => {
-    //         req.session = null;
-    //         res.redirect("/");
-    //     });
-    // });
 });
 
 app.get("/user", (req, res) => {

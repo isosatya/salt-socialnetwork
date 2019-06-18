@@ -1,5 +1,10 @@
 import React, { Component } from "react";
 // import { HashRouter, Route } from "react-router-dom";
+import {
+    Transition,
+    CSSTransition,
+    TransitionGroup
+} from "react-transition-group";
 import ProfilePic from "./profilePic";
 import BioEditor from "./bioEditor";
 import axios from "axios";
