@@ -168,7 +168,7 @@ module.exports.addChatMsg = function addChatMsg(sender_id, text) {
         `
         INSERT INTO chats (sender_id, text)
         VALUES ($1, $2)
-        RETURNING id;
+        RETURNING *;
     `,
         [sender_id, text]
     );
@@ -176,9 +176,11 @@ module.exports.addChatMsg = function addChatMsg(sender_id, text) {
 
 module.exports.getRecentChats = function getRecentChats() {
     return db.query(
-        `SELECT *
+        ` SELECT users.id, first, last, imgUrl, chats.id, text
         FROM chats
-        ORDER BY id DESC
+        JOIN users
+        ON (sender_id = users.id)
+        ORDER BY chats.id DESC
         LIMIT 10;`
     );
 };
@@ -195,5 +197,36 @@ module.exports.getChatAndUserInfo = function getChatAndUserInfo(
     ON (users.id = $1 AND sender_id = users.id AND chats.id = $2)
     `,
         [usersid, chatsid]
+    );
+};
+
+module.exports.addPicDatabase = function addPicDatabase(user_id, url) {
+    return db.query(
+        `
+        INSERT INTO pictures (user_id, imgUrl)
+        VALUES ($1, $2)
+        RETURNING *;
+    `,
+        [user_id, url]
+    );
+};
+
+module.exports.getPicsUserDatabase = function getPicsUserDatabase(user_id) {
+    return db.query(
+        `
+        SELECT imgUrl FROM pictures
+        WHERE (user_id = $1)
+        `,
+        [user_id]
+    );
+};
+
+module.exports.deleteUserFriendships = function deleteUserFriendships(id) {
+    return db.query(
+        `
+        DELETE FROM friendships
+        WHERE (sender_id = $1 OR receiver_id = $1)
+        `,
+        [id]
     );
 };

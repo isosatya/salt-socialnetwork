@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import ProfilePic from "./profilePic";
 import BioEditor from "./bioEditor";
 import axios from "axios";
+import Chatting from "./chatting";
 
 class Profile extends Component {
     constructor(props) {
@@ -53,6 +54,9 @@ class Profile extends Component {
                             Logout
                         </button>
                     </div>
+                </div>
+                <div className="chatWindow">
+                    <Chatting />
                 </div>
             </div>
         );

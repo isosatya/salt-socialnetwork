@@ -141,10 +141,20 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/delete", (req, res) => {
-    db.deleteUser(req.session.usersId).then(() => {
-        req.session = null;
-        res.redirect("/");
+    const user = req.session.usersId;
+    db.getPicsUserDatabase(user).then(results => {
+        console.log(results.rows);
+        let images = results.rows.map(image => image.imgurl);
+        console.log("images", images);
+        s3.delete(images);
     });
+
+    // db.deleteUserFriendships(user).then(() => {
+    //     db.deleteUser(user).then(() => {
+    //         req.session = null;
+    //         res.redirect("/");
+    //     });
+    // });
 });
 
 app.get("/user", (req, res) => {
@@ -268,6 +278,7 @@ app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
     var id = req.session.usersId;
     db.updateProfilePic(id, url)
         .then(() => {
+            db.addPicDatabase(id, url);
             res.json(url);
         })
         .catch(err => console.log("Error at UpdateProfilePic", err));
@@ -329,21 +340,21 @@ io.on("connection", function(socket) {
     const usersId = socket.request.session.usersId;
 
     db.getRecentChats().then(results => {
-        console.log("results for the getRecentChats query", results.rows);
-
-        ///// check here if results.rows or something else  ------
-        socket.emit("chatMessages", results.rows);
+        // console.log("results for the getRecentChats query", results.rows);
+        socket.emit("chatMessages", results.rows.reverse());
     });
 
-    // socket.on("chatMessage", (id, msg) => {
-    //     db.addChatMsg(id, msg).then(results =>
-    //         db.getChatAndUserInfo(usersId, results.rows[0].id).then(results => {
-    //             console.log("db.getChatAndUserInfo results ", results.rows);
+    socket.on("chatMessage", msg => {
+        // console.log("listened to chatMessage event ", msg);
 
-    //             // io.sockets.broadcast.emit("chatMessage", { results });
-    //         })
-    //     );
-    // });
+        db.addChatMsg(usersId, msg).then(results => {
+            // console.log("results for addChatMsg", results.rows);
+
+            db.getChatAndUserInfo(usersId, results.rows[0].id).then(results => {
+                io.sockets.emit("chatMessage", results.rows[0]);
+            });
+        });
+    });
 
     // socket.on("disconnect", function() {
     //     console.log(`socket with the id ${socket.id} is now disconnected`);

@@ -2,7 +2,7 @@ import * as io from "socket.io-client";
 import { chatMessages } from "./actions";
 import { chatMessage } from "./actions";
 
-let socket;
+export let socket;
 
 export function initSocket(store) {
     if (!socket) {
@@ -10,12 +10,14 @@ export function initSocket(store) {
     }
 
     socket.on("chatMessages", msgs => {
-        console.log("Recent chats from backend", msgs);
-
         store.dispatch(chatMessages(msgs));
     });
 
-    // socket.on("chatMessage", msg => store.dispatch(chatMessage(msg)));
+    socket.on("chatMessage", msg => {
+        // console.log("message from backend", msg);
+
+        store.dispatch(chatMessage(msg));
+    });
 
     // socket.on("welcome", function(data) {
     //     console.log(data);

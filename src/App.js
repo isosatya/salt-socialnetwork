@@ -110,10 +110,10 @@ class App extends Component {
                                     path="/users"
                                     render={props => <FindPeople />}
                                 />
-                                <Route
+                                {/* <Route
                                     path="/chat"
                                     render={props => <Chatting />}
-                                />
+                                /> */}
                                 <Route
                                     path="/friends"
                                     render={props => <FriendsList />}
