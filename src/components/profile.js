@@ -13,7 +13,9 @@ import Chatting from "./chatting";
 class Profile extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            appearChat: true
+        };
         this.logout = this.logout.bind(this);
         this.delete = this.delete.bind(this);
     }
@@ -59,9 +61,6 @@ class Profile extends Component {
                             Logout
                         </button>
                     </div>
-                </div>
-                <div className="chatWindow">
-                    <Chatting />
                 </div>
             </div>
         );

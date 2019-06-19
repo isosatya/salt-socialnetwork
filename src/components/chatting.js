@@ -19,11 +19,12 @@ class Chatting extends Component {
         //     "this windows scroll",
         //     this.chatwindow.current.scrollHeight
         // );
-        // console.log("client height", this.chatwindow.current.clientHeight);
 
-        this.chatwindow.current.scrollTop =
-            this.chatwindow.current.scrollHeight -
-            this.chatwindow.current.clientHeight;
+        if (this.chatwindow.current != null || undefined) {
+            this.chatwindow.current.scrollTop =
+                this.chatwindow.current.scrollHeight -
+                this.chatwindow.current.clientHeight;
+        }
     }
 
     componentDidUpdate() {
@@ -50,8 +51,28 @@ class Chatting extends Component {
             return null;
         }
 
+        console.log("this.props at chatting", this.props);
+
         return (
-            <div>
+            <div className="chatsContainer">
+                <div className="onlineUsers">
+                    <h1>Online people</h1>
+                    {this.props.users.map(user => (
+                        <div key={user.id} className="onlineUser">
+                            <div className="dot" />
+                            <img
+                                className="chatProfilePic"
+                                src={
+                                    user.imgurl ? user.imgurl : "./uglydog.jpg"
+                                }
+                                alt={user.first + " " + user.last}
+                            />
+                            <div>
+                                <p>{user.first + " " + user.last}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
                 <div className="chatWindow" ref={this.chatwindow}>
                     <div>
                         {this.props.chats.map(chat => (
@@ -85,6 +106,9 @@ class Chatting extends Component {
                         <button onClick={this.submitChat}>Send</button>
                     </div>
                 </div>
+                <div className="privateChat">
+                    <h1>Private Chat</h1>
+                </div>
             </div>
         );
     }
@@ -98,7 +122,8 @@ class Chatting extends Component {
 const mapStateToProps = state => {
     // console.log("state in map.StateToProps in friendsList component:", state);
     return {
-        chats: state.chats
+        chats: state.chats && state.chats.filter(chat => chat),
+        users: state.onlineusers && state.onlineusers.filter(user => user)
     };
 };
 

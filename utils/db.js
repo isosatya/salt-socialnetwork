@@ -242,3 +242,8 @@ module.exports.deleteUserFriendships = function deleteUserFriendships(id) {
         [id]
     );
 };
+
+module.exports.onlineUsersInfo = function onlineUsersInfo(arrayOfIds) {
+    const query = `SELECT id, first, last, imgUrl FROM users WHERE id = ANY($1)`;
+    return db.query(query, [arrayOfIds]);
+};

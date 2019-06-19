@@ -62,6 +62,13 @@ export default function reducer(state = {}, action) {
         };
     }
 
+    if (action.type === "ONLINE_USERS") {
+        return {
+            ...state,
+            onlineusers: action.onlineusers
+        };
+    }
+
     // console.log("state at reducer", state);
 
     return state;

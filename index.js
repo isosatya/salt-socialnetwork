@@ -333,6 +333,7 @@ server.listen(8080, function() {
 });
 
 //////////////////////////////////////// Socket Events
+const onlineUsers = {};
 
 io.on("connection", function(socket) {
     // console.log(`socket with the id ${socket.id} is now connected`);
@@ -341,6 +342,18 @@ io.on("connection", function(socket) {
         return socket.disconnect(true);
     }
     const usersId = socket.request.session.usersId;
+    // console.log(
+    //     `socket with the id ${socket.id} is now connected with user ${usersId}`
+    // );
+    // console.log("online users", onlineUsers);
+
+    onlineUsers[socket.id] = usersId;
+    const onlineUsersArray = Object.values(onlineUsers);
+    // console.log("users online", onlineUsersArray);
+    db.onlineUsersInfo(onlineUsersArray).then(results => {
+        // console.log("onlineUsersInfo query results", results.rows);
+        socket.emit("onlineUsers", results.rows);
+    });
 
     db.getRecentChats().then(results => {
         // console.log("results for the getRecentChats query", results.rows);
@@ -359,9 +372,16 @@ io.on("connection", function(socket) {
         });
     });
 
-    // socket.on("disconnect", function() {
-    //     console.log(`socket with the id ${socket.id} is now disconnected`);
-    // });
+    socket.on("disconnect", function() {
+        // console.log(
+        //     `socket with the id ${
+        //         socket.id
+        //     } is now disconnected with user ${usersId}`
+        // );
+        // console.log("online users", onlineUsers);
+
+        delete onlineUsers[socket.id];
+    });
 
     // socket.on("thanks", function(data) {
     //     console.log(data);

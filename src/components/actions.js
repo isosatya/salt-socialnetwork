@@ -60,3 +60,10 @@ export async function chatMessage(msg) {
         chat: msg
     };
 }
+
+export async function onlineUsers(users) {
+    return {
+        type: "ONLINE_USERS",
+        onlineusers: users
+    };
+}
