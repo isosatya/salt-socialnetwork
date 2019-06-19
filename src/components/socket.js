@@ -2,6 +2,7 @@ import * as io from "socket.io-client";
 import { chatMessages } from "./actions";
 import { chatMessage } from "./actions";
 import { onlineUsers } from "./actions";
+import { userJoinedOrLeft } from "./actions";
 
 export let socket;
 
@@ -23,6 +24,10 @@ export function initSocket(store) {
     socket.on("onlineUsers", users => {
         console.log("users online from backend", users);
         store.dispatch(onlineUsers(users));
+    });
+
+    socket.on("userJoinedOrLeft", users => {
+        store.dispatch(userJoinedOrLeft(users));
     });
 
     // socket.on("welcome", function(data) {

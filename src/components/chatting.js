@@ -20,7 +20,7 @@ class Chatting extends Component {
         //     this.chatwindow.current.scrollHeight
         // );
 
-        if (this.chatwindow.current != null || undefined) {
+        if (this.chatwindow.current) {
             this.chatwindow.current.scrollTop =
                 this.chatwindow.current.scrollHeight -
                 this.chatwindow.current.clientHeight;
@@ -28,9 +28,11 @@ class Chatting extends Component {
     }
 
     componentDidUpdate() {
-        this.chatwindow.current.scrollTop =
-            this.chatwindow.current.scrollHeight -
-            this.chatwindow.current.clientHeight;
+        if (this.chatwindow.current) {
+            this.chatwindow.current.scrollTop =
+                this.chatwindow.current.scrollHeight -
+                this.chatwindow.current.clientHeight;
+        }
     }
 
     handleChange(e) {
@@ -121,6 +123,8 @@ class Chatting extends Component {
 
 const mapStateToProps = state => {
     // console.log("state in map.StateToProps in friendsList component:", state);
+    console.log("state for chats", state.onlineusers);
+
     return {
         chats: state.chats && state.chats.filter(chat => chat),
         users: state.onlineusers && state.onlineusers.filter(user => user)

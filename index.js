@@ -353,6 +353,7 @@ io.on("connection", function(socket) {
     db.onlineUsersInfo(onlineUsersArray).then(results => {
         // console.log("onlineUsersInfo query results", results.rows);
         socket.emit("onlineUsers", results.rows);
+        io.sockets.emit("userJoinedOrLeft", results.rows);
     });
 
     db.getRecentChats().then(results => {
@@ -381,6 +382,11 @@ io.on("connection", function(socket) {
         // console.log("online users", onlineUsers);
 
         delete onlineUsers[socket.id];
+        db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
+            // console.log("onlineUsersInfo query results", results.rows);
+            // socket.emit("onlineUsers", results.rows);
+            io.sockets.emit("userJoinedOrLeft", results.rows);
+        });
     });
 
     // socket.on("thanks", function(data) {
