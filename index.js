@@ -348,13 +348,14 @@ io.on("connection", function(socket) {
     // console.log("online users", onlineUsers);
 
     const onlineUsersArray = Object.values(onlineUsers);
+
     const found = onlineUsersArray.find(user => {
-        return (user = usersId);
+        return user == usersId;
     });
+
     if (!found) {
         onlineUsers[socket.id] = usersId;
     }
-    console.log("users online", onlineUsers);
 
     db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
         // console.log("onlineUsersInfo query results", results.rows);
@@ -387,11 +388,10 @@ io.on("connection", function(socket) {
         // );
 
         delete onlineUsers[socket.id];
-        console.log("online users after disconnection", onlineUsers);
 
         db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
             // console.log("onlineUsersInfo query results", results.rows);
-            // socket.emit("onlineUsers", results.rows);
+            socket.emit("onlineUsers", results.rows);
             io.sockets.emit("userJoinedOrLeft", results.rows);
         });
     });

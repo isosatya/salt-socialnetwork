@@ -61,12 +61,12 @@ export async function chatMessage(msg) {
     };
 }
 
-// export async function onlineUsers(users) {
-//     return {
-//         type: "ONLINE_USERS",
-//         onlineusers: users
-//     };
-// }
+export async function onlineUsers(users) {
+    return {
+        type: "ONLINE_USERS",
+        onlineusers: users
+    };
+}
 
 export async function userJoinedOrLeft(users) {
     return {

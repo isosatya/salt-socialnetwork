@@ -276,6 +276,24 @@ body {
     width: 90%;
 }
 
+.otherProfChat {
+    margin: 0;
+    overflow-y: scroll;
+    /* position: fixed; */
+    right: 10%;
+    top: 42%;
+    background: linear-gradient(
+        rgb(169, 238, 230, 0.6),
+        rgba(169, 238, 230, 0.6)
+    );
+    background-size: 100%;
+    height: 90%;
+    border: transparent;
+    border-radius: 5px;
+    width: 33vw;
+    z-index: 50;
+}
+
 /* ////////////////////////////////////////    Chat windows */
 
 .chatsContainer {
@@ -305,7 +323,7 @@ body {
     height: 100%;
     border: transparent;
     border-radius: 5px;
-    width: 34vw;
+    width: 67vw;
     z-index: 50;
     /* display: fixed;
     justify-content: center;
@@ -331,11 +349,6 @@ body {
     width: 10px;
     background-color: greenyellow;
     border-radius: 50%;
-}
-
-.privateChat {
-    border: solid 3px orange;
-    width: 33vw;
 }
 
 .chatProfilePic {

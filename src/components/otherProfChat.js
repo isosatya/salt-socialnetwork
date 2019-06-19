@@ -15,11 +15,6 @@ class Chatting extends Component {
         this.submitChat = this.submitChat.bind(this);
     }
     componentDidMount() {
-        // console.log(
-        //     "this windows scroll",
-        //     this.chatwindow.current.scrollHeight
-        // );
-
         if (this.chatwindow.current) {
             this.chatwindow.current.scrollTop =
                 this.chatwindow.current.scrollHeight -
@@ -57,21 +52,12 @@ class Chatting extends Component {
 
         return (
             <div className="chatsContainer">
-                <div
-                    className="onlineUsers"
-                    // onClick={e => console.log("e.target user", e.target)}
-                >
+                <div className="onlineUsers">
                     <h1>Online people</h1>
-                    {this.props.users && (
+                    {/* {this.props.users && (
                         <div>
                             {this.props.users.map(user => (
-                                <div
-                                    key={user.id}
-                                    className="onlineUser"
-                                    onClick={e =>
-                                        console.log("e.target user", user.id)
-                                    }
-                                >
+                                <div key={user.id} className="onlineUser">
                                     <div className="dot" />
                                     <img
                                         className="chatProfilePic"
@@ -88,10 +74,10 @@ class Chatting extends Component {
                                 </div>
                             ))}
                         </div>
-                    )}
+                    )} */}
                 </div>
                 <div className="chatWindow" ref={this.chatwindow}>
-                    {this.props.chats && (
+                    {/* {this.props.chats && (
                         <div>
                             {this.props.chats.map(chat => (
                                 <div key={chat.id}>
@@ -111,7 +97,7 @@ class Chatting extends Component {
                                 </div>
                             ))}
                         </div>
-                    )}
+                    )} */}
                     <div>
                         <textarea
                             rows="3"
