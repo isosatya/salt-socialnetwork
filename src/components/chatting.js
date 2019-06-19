@@ -53,48 +53,56 @@ class Chatting extends Component {
             return null;
         }
 
-        console.log("this.props at chatting", this.props);
+        // console.log("this.props at chatting", this.props);
 
         return (
             <div className="chatsContainer">
                 <div className="onlineUsers">
                     <h1>Online people</h1>
-                    {this.props.users.map(user => (
-                        <div key={user.id} className="onlineUser">
-                            <div className="dot" />
-                            <img
-                                className="chatProfilePic"
-                                src={
-                                    user.imgurl ? user.imgurl : "./uglydog.jpg"
-                                }
-                                alt={user.first + " " + user.last}
-                            />
-                            <div>
-                                <p>{user.first + " " + user.last}</p>
-                            </div>
+                    {this.props.users && (
+                        <div>
+                            {this.props.users.map(user => (
+                                <div key={user.id} className="onlineUser">
+                                    <div className="dot" />
+                                    <img
+                                        className="chatProfilePic"
+                                        src={
+                                            user.imgurl
+                                                ? user.imgurl
+                                                : "./uglydog.jpg"
+                                        }
+                                        alt={user.first + " " + user.last}
+                                    />
+                                    <div>
+                                        <p>{user.first + " " + user.last}</p>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    )}
                 </div>
                 <div className="chatWindow" ref={this.chatwindow}>
-                    <div>
-                        {this.props.chats.map(chat => (
-                            <div key={chat.id}>
-                                <img
-                                    className="chatProfilePic"
-                                    src={
-                                        chat.imgurl
-                                            ? chat.imgurl
-                                            : "./uglydog.jpg"
-                                    }
-                                    alt={chat.first + " " + chat.last}
-                                />
-                                <div>
-                                    <p>{chat.first + " " + chat.last}</p>
-                                    <p>{chat.text}</p>
+                    {this.props.chats && (
+                        <div>
+                            {this.props.chats.map(chat => (
+                                <div key={chat.id}>
+                                    <img
+                                        className="chatProfilePic"
+                                        src={
+                                            chat.imgurl
+                                                ? chat.imgurl
+                                                : "./uglydog.jpg"
+                                        }
+                                        alt={chat.first + " " + chat.last}
+                                    />
+                                    <div>
+                                        <p>{chat.first + " " + chat.last}</p>
+                                        <p>{chat.text}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                     <div>
                         <textarea
                             rows="3"
@@ -123,11 +131,11 @@ class Chatting extends Component {
 
 const mapStateToProps = state => {
     // console.log("state in map.StateToProps in friendsList component:", state);
-    console.log("state for chats", state.onlineusers);
+    // console.log("state for chats", state.onlineusers);
 
     return {
-        chats: state.chats && state.chats.filter(chat => chat),
-        users: state.onlineusers && state.onlineusers.filter(user => user)
+        chats: state.chats,
+        users: state.onlineusers
     };
 };
 

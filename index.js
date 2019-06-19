@@ -110,7 +110,7 @@ app.post("/register", function(req, res) {
 });
 
 app.post("/login", (req, res) => {
-    console.log("req. body for login", req.body);
+    // console.log("req. body for login", req.body);
 
     var email = req.body.email;
     var password = req.body.password;
@@ -347,12 +347,18 @@ io.on("connection", function(socket) {
     // );
     // console.log("online users", onlineUsers);
 
-    onlineUsers[socket.id] = usersId;
     const onlineUsersArray = Object.values(onlineUsers);
-    // console.log("users online", onlineUsersArray);
-    db.onlineUsersInfo(onlineUsersArray).then(results => {
+    const found = onlineUsersArray.find(user => {
+        return (user = usersId);
+    });
+    if (!found) {
+        onlineUsers[socket.id] = usersId;
+    }
+    console.log("users online", onlineUsers);
+
+    db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
         // console.log("onlineUsersInfo query results", results.rows);
-        socket.emit("onlineUsers", results.rows);
+        // socket.emit("onlineUsers", results.rows); //--> emit does the job
         io.sockets.emit("userJoinedOrLeft", results.rows);
     });
 
@@ -379,9 +385,10 @@ io.on("connection", function(socket) {
         //         socket.id
         //     } is now disconnected with user ${usersId}`
         // );
-        // console.log("online users", onlineUsers);
 
         delete onlineUsers[socket.id];
+        console.log("online users after disconnection", onlineUsers);
+
         db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
             // console.log("onlineUsersInfo query results", results.rows);
             // socket.emit("onlineUsers", results.rows);

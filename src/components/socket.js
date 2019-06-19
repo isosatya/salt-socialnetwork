@@ -21,10 +21,10 @@ export function initSocket(store) {
         store.dispatch(chatMessage(msg));
     });
 
-    socket.on("onlineUsers", users => {
-        console.log("users online from backend", users);
-        store.dispatch(onlineUsers(users));
-    });
+    // socket.on("onlineUsers", users => {
+    //     console.log("users online from backend", users);
+    //     store.dispatch(onlineUsers(users));
+    // });
 
     socket.on("userJoinedOrLeft", users => {
         store.dispatch(userJoinedOrLeft(users));
