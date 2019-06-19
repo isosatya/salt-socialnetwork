@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 ///////////////////////// For the Socket events to work
 import { socket } from "./socket";
+import PrivChatting from "./privChatting";
 
 //////////////////////////////////
 
@@ -28,6 +29,14 @@ class Chatting extends Component {
     }
 
     componentDidUpdate() {
+        // console.log(
+        //     "this windows scroll height",
+        //     this.chatwindow.current.scrollHeight
+        // );
+        // console.log(
+        //     "this windows client height",
+        //     this.chatwindow.current.clientHeight
+        // );
         if (this.chatwindow.current) {
             this.chatwindow.current.scrollTop =
                 this.chatwindow.current.scrollHeight -
@@ -53,7 +62,7 @@ class Chatting extends Component {
             return null;
         }
 
-        // console.log("this.props at chatting", this.props);
+        console.log("this.props at chatting", this.props);
 
         return (
             <div className="chatsContainer">
@@ -68,8 +77,8 @@ class Chatting extends Component {
                                 <div
                                     key={user.id}
                                     className="onlineUser"
-                                    onClick={e =>
-                                        console.log("e.target user", user.id)
+                                    onClick={() =>
+                                        socket.emit("privateChatUser", user.id)
                                     }
                                 >
                                     <div className="dot" />
@@ -124,6 +133,9 @@ class Chatting extends Component {
                     <div>
                         <button onClick={this.submitChat}>Send</button>
                     </div>
+                </div>
+                <div className="privChats">
+                    <PrivChatting />
                 </div>
             </div>
         );

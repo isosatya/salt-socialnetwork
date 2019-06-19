@@ -163,6 +163,34 @@ module.exports.getFriendsList = function getFriendsList(id) {
     );
 };
 
+module.exports.getRecentChats = function getRecentChats() {
+    return db.query(
+        ` SELECT users.id, first, last, imgUrl, chats.id, text, chats.created_at
+        FROM chats
+        JOIN users
+        ON (sender_id = users.id)
+        ORDER BY chats.id DESC
+        LIMIT 10;`
+    );
+};
+
+module.exports.getRecentPrivateChats = function getRecentPrivateChats(
+    sender_id,
+    receiver_id
+) {
+    return db.query(
+        ` SELECT users.id, first, last, imgUrl, privatechat.id, text, privatechat.created_at
+        FROM privatechat
+        JOIN users
+        ON (sender_id = $1 AND receiver_id = $2 AND sender_id = users.id)
+        OR (sender_id = $2 AND receiver_id = $1 AND sender_id = users.id)
+        ORDER BY privatechat.id DESC
+        LIMIT 10;
+        `,
+        [sender_id, receiver_id]
+    );
+};
+
 module.exports.addChatMsg = function addChatMsg(sender_id, text) {
     return db.query(
         `
@@ -174,14 +202,18 @@ module.exports.addChatMsg = function addChatMsg(sender_id, text) {
     );
 };
 
-module.exports.getRecentChats = function getRecentChats() {
+module.exports.addPrivateChatMsg = function addPrivateChatMsg(
+    sender_id,
+    receiver_id,
+    text
+) {
     return db.query(
-        ` SELECT users.id, first, last, imgUrl, chats.id, text
-        FROM chats
-        JOIN users
-        ON (sender_id = users.id)
-        ORDER BY chats.id DESC
-        LIMIT 10;`
+        `
+        INSERT INTO privatechat (sender_id, receiver_id, text)
+        VALUES ($1, $2, $3)
+        RETURNING *;
+    `,
+        [sender_id, receiver_id, text]
     );
 };
 
@@ -191,12 +223,27 @@ module.exports.getChatAndUserInfo = function getChatAndUserInfo(
 ) {
     return db.query(
         `
-    SELECT users.id, first, last, imgUrl, chats.id, text
+    SELECT users.id, first, last, imgUrl, chats.id, text, chats.created_at
     FROM chats
     JOIN users
     ON (users.id = $1 AND sender_id = users.id AND chats.id = $2)
     `,
         [usersid, chatsid]
+    );
+};
+
+module.exports.getPrivateChatAndUserInfo = function getPrivateChatAndUserInfo(
+    usersid,
+    privatechatsid
+) {
+    return db.query(
+        `
+    SELECT users.id, first, last, imgUrl, privatechat.id, text, privatechat.created_at
+    FROM privatechat
+    JOIN users
+    ON (users.id = $1 AND sender_id = users.id AND privatechat.id = $2)
+    `,
+        [usersid, privatechatsid]
     );
 };
 

@@ -338,6 +338,9 @@ const onlineUsers = {};
 io.on("connection", function(socket) {
     // console.log(`socket with the id ${socket.id} is now connected`);
 
+    const date = new Date("2019-06-19T07:21:13.774Z");
+    console.log("date format", date);
+
     if (!socket.request.session.usersId) {
         return socket.disconnect(true);
     }
@@ -376,6 +379,48 @@ io.on("connection", function(socket) {
 
             db.getChatAndUserInfo(usersId, results.rows[0].id).then(results => {
                 io.sockets.emit("chatMessage", results.rows[0]);
+            });
+        });
+    });
+
+    socket.on("privateChatUser", user => {
+        // console.log("usersId who is logged in", usersId);
+        // console.log("other user from chat", user);
+        // console.log("online users table", onlineUsers);
+
+        function getSocketIdByUser(object, value) {
+            return Object.keys(object).find(key => object[key] === value);
+        }
+
+        const recipientSocketId = getSocketIdByUser(onlineUsers, user);
+        console.log(`socketId for user ${user}`, recipientSocketId);
+
+        db.getRecentPrivateChats(usersId, user).then(results => {
+            // console.log("results from private chats", results.rows);
+            if (user != usersId) {
+                socket.emit("privateChatMsgs", results.rows.reverse());
+                io.sockets.sockets[recipientSocketId].emit(
+                    "privateChatMsgs",
+                    results.rows.reverse()
+                );
+            }
+        });
+
+        socket.on("privateChatMessage", msg => {
+            // console.log("listened private to chatMessage event ", msg);
+
+            db.addPrivateChatMsg(usersId, user, msg).then(results => {
+                // console.log("results for addChatMsg", results.rows);
+                db.getPrivateChatAndUserInfo(usersId, results.rows[0].id).then(
+                    results => {
+                        // console.log(
+                        //     "getPrivateChatAndUserInfo results",
+                        //     results.rows[0]
+                        // );
+
+                        io.sockets.emit("privateChatMsg", results.rows[0]);
+                    }
+                );
             });
         });
     });

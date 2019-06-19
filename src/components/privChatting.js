@@ -5,7 +5,7 @@ import { socket } from "./socket";
 
 //////////////////////////////////
 
-class Chatting extends Component {
+class PrivChatting extends Component {
     constructor() {
         super();
         this.state = { chat: "" };
@@ -16,17 +16,46 @@ class Chatting extends Component {
     }
     componentDidMount() {
         if (this.chatwindow.current) {
-            this.chatwindow.current.scrollTop =
+            this.chatwindow.current.offsetParent.scrollTop =
                 this.chatwindow.current.scrollHeight -
-                this.chatwindow.current.clientHeight;
+                this.chatwindow.current.offsetParent.clientHeight;
         }
     }
 
     componentDidUpdate() {
         if (this.chatwindow.current) {
-            this.chatwindow.current.scrollTop =
+            // console.log(this.chatwindow);
+
+            // console.log(
+            //     "scroll height PARENT",
+            //     this.chatwindow.current.offsetParent.scrollHeight
+            // );
+            // console.log(
+            //     "client height PARENT",
+            //     this.chatwindow.current.offsetParent.clientHeight
+            // );
+
+            // console.log(
+            //     "this windows scroll height",
+            //     this.chatwindow.current.scrollHeight
+            // );
+            // console.log(
+            //     "this windows client height",
+            //     this.chatwindow.current.clientHeight
+            // );
+
+            // console.log(
+            //     "offsetHeight",
+            //     this.chatwindow.current.offsetParent.offsetHeight
+            // );
+            // console.log(
+            //     "offsetTop",
+            //     this.chatwindow.current.offsetParent.offsetTop
+            // );
+
+            this.chatwindow.current.offsetParent.scrollTop =
                 this.chatwindow.current.scrollHeight -
-                this.chatwindow.current.clientHeight;
+                this.chatwindow.current.offsetParent.clientHeight;
         }
     }
 
@@ -37,7 +66,7 @@ class Chatting extends Component {
 
     submitChat() {
         if (this.chattext.current.value != "") {
-            socket.emit("chatMessage", this.state.chat);
+            socket.emit("privateChatMessage", this.state.chat);
             // console.log("this.chattext.current", this.chattext);
             this.chattext.current.value = "";
         }
@@ -45,39 +74,19 @@ class Chatting extends Component {
 
     render() {
         if (!this.props.chats) {
+            console.log("this.props.chats is null");
+
             return null;
         }
 
-        // console.log("this.props at chatting", this.props);
+        // console.log("this.props at private chatting", this.props);
 
         return (
-            <div className="chatsContainer">
-                <div className="onlineUsers">
-                    <h1>Online people</h1>
-                    {/* {this.props.users && (
-                        <div>
-                            {this.props.users.map(user => (
-                                <div key={user.id} className="onlineUser">
-                                    <div className="dot" />
-                                    <img
-                                        className="chatProfilePic"
-                                        src={
-                                            user.imgurl
-                                                ? user.imgurl
-                                                : "./uglydog.jpg"
-                                        }
-                                        alt={user.first + " " + user.last}
-                                    />
-                                    <div>
-                                        <p>{user.first + " " + user.last}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )} */}
-                </div>
+            <div className="privChatsContainer">
+                <h1>Private Chats</h1>
+
                 <div className="chatWindow" ref={this.chatwindow}>
-                    {/* {this.props.chats && (
+                    {this.props.chats && (
                         <div>
                             {this.props.chats.map(chat => (
                                 <div key={chat.id}>
@@ -97,7 +106,7 @@ class Chatting extends Component {
                                 </div>
                             ))}
                         </div>
-                    )} */}
+                    )}
                     <div>
                         <textarea
                             rows="3"
@@ -126,9 +135,8 @@ const mapStateToProps = state => {
     // console.log("state for chats", state.onlineusers);
 
     return {
-        chats: state.chats,
-        users: state.onlineusers
+        chats: state.priv_chats
     };
 };
 
-export default connect(mapStateToProps)(Chatting);
+export default connect(mapStateToProps)(PrivChatting);

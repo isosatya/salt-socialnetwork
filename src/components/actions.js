@@ -74,3 +74,17 @@ export async function userJoinedOrLeft(users) {
         onlineusers: users
     };
 }
+
+export async function privateChatMessages(priv_msgs) {
+    return {
+        type: "RECENT_PRIV_CHATS",
+        priv_chats: priv_msgs
+    };
+}
+
+export async function privateChatMessage(priv_msg) {
+    return {
+        type: "NEW_PRIV_CHAT",
+        priv_chat: priv_msg
+    };
+}

@@ -276,24 +276,6 @@ body {
     width: 90%;
 }
 
-.otherProfChat {
-    margin: 0;
-    overflow-y: scroll;
-    /* position: fixed; */
-    right: 10%;
-    top: 42%;
-    background: linear-gradient(
-        rgb(169, 238, 230, 0.6),
-        rgba(169, 238, 230, 0.6)
-    );
-    background-size: 100%;
-    height: 90%;
-    border: transparent;
-    border-radius: 5px;
-    width: 33vw;
-    z-index: 50;
-}
-
 /* ////////////////////////////////////////    Chat windows */
 
 .chatsContainer {
@@ -302,40 +284,21 @@ body {
     justify-content: space-around;
     border: solid red 5px;
     height: 74vh;
-}
-
-.onlineUsers {
-    border: solid 3px blue;
-    width: 33vw;
-}
-
-.chatWindow {
-    margin: 0;
-    overflow-y: scroll;
-    /* position: fixed; */
-    right: 10%;
-    top: 42%;
-    background: linear-gradient(
-        rgb(169, 238, 230, 0.6),
-        rgba(169, 238, 230, 0.6)
-    );
-    background-size: 100%;
-    height: 100%;
-    border: transparent;
-    border-radius: 5px;
-    width: 67vw;
-    z-index: 50;
-    /* display: fixed;
-    justify-content: center;
-    display: flex;
-    justify-content: center;
-    align-items: center; */
+    width: 100vw;
 }
 
 .onlineUsers {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    width: 25vw;
+}
+
+.dot {
+    height: 10px;
+    width: 10px;
+    background-color: greenyellow;
+    border-radius: 50%;
 }
 
 .onlineUser {
@@ -344,11 +307,42 @@ body {
     justify-content: flex-start;
 }
 
-.dot {
-    height: 10px;
-    width: 10px;
-    background-color: greenyellow;
-    border-radius: 50%;
+.chatWindow {
+    margin: 0;
+    overflow-y: scroll;
+    /* position: fixed; */
+    /* right: 10%;
+    top: 42%; */
+    background: linear-gradient(
+        rgb(169, 238, 230, 0.6),
+        rgba(169, 238, 230, 0.6)
+    );
+    background-size: 100%;
+    height: 100%;
+    border: transparent;
+    border-radius: 5px;
+    width: 40vw;
+    z-index: 50;
+    /* display: fixed;
+    justify-content: center;
+    display: flex;
+    justify-content: center;
+    align-items: center; */
+}
+
+.privChats {
+    margin: 0;
+    overflow-y: scroll;
+    /* position: fixed; */
+    /* right: 10%; */
+    /* top: 42%; */
+    background: white;
+    background-size: 100%;
+    height: 100%;
+    border: transparent;
+    border-radius: 5px;
+    width: 35vw;
+    z-index: 50;
 }
 
 .chatProfilePic {

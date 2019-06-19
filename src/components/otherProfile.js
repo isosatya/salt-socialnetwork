@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import axios from "axios";
 import ProfilePic from "./profilePic";
 import FriendButton from "./friendButton";
-import otherProfChat from "./otherProfChat";
 
 class OtherProfile extends Component {
     constructor(props) {
@@ -44,10 +43,6 @@ class OtherProfile extends Component {
                     <div>
                         <FriendButton match={this.props.match.params.id} />
                     </div>
-                </div>
-                <div className="otherProfChat">
-                    <h1>PRIVATE CHAT</h1>
-                    <otherProfChat />
                 </div>
             </div>
         );
