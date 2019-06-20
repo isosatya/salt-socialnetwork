@@ -72,13 +72,13 @@ class App extends Component {
             <div>
                 {this.state.first && (
                     <div>
-                        <Header
-                            first={this.state.first}
-                            last={this.state.last}
-                            imgurl={this.state.imgurl}
-                        />
                         <BrowserRouter>
                             <div>
+                                <Header
+                                    first={this.state.first}
+                                    last={this.state.last}
+                                    imgurl={this.state.imgurl}
+                                />
                                 <Route
                                     exact
                                     path="/"

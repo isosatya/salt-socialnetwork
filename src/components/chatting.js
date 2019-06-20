@@ -71,7 +71,7 @@ class Chatting extends Component {
                     className="onlineUsers"
                     // onClick={e => console.log("e.target user", e.target)}
                 >
-                    <h1>Online people</h1>
+                    <h1 className="onlineTitle">Mobsters Online</h1>
                     {this.props.users && (
                         <div>
                             {this.props.users.map(user => (
@@ -84,7 +84,7 @@ class Chatting extends Component {
                                 >
                                     <div className="dot" />
                                     <img
-                                        className="chatProfilePic"
+                                        className="onlineProfilePic"
                                         src={
                                             user.imgurl
                                                 ? user.imgurl
@@ -93,7 +93,9 @@ class Chatting extends Component {
                                         alt={user.first + " " + user.last}
                                     />
                                     <div>
-                                        <p>{user.first + " " + user.last}</p>
+                                        <p className="onlineName">
+                                            {user.first + " " + user.last}
+                                        </p>
                                     </div>
                                 </div>
                             ))}
@@ -102,7 +104,7 @@ class Chatting extends Component {
                 </div>
                 <div className="chatWindow" ref={this.chatwindow}>
                     {this.props.chats && (
-                        <div>
+                        <div className="chatWindow2">
                             {this.props.chats.map(chat => (
                                 <div key={chat.id}>
                                     <div className="chatPicName">
@@ -129,17 +131,23 @@ class Chatting extends Component {
                             ))}
                         </div>
                     )}
-                    <div>
+                    <div className="chatInput">
                         <textarea
                             rows="3"
                             cols="25"
                             defaultValue={this.props.chat}
                             ref={this.chattext}
                             onChange={e => this.handleChange(e)}
+                            className="chatTextArea"
                         />
-                    </div>
-                    <div>
-                        <button onClick={this.submitChat}>Send</button>
+                        <div>
+                            <button
+                                onClick={this.submitChat}
+                                className="chatSendButton"
+                            >
+                                Send
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div className="privChats" ref={this.chatwindow2}>

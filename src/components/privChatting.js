@@ -30,9 +30,13 @@ class PrivChatting extends Component {
 
     render() {
         if (!this.props.chats) {
-            console.log("this.props.chats is null");
+            console.log("private this.props.chats is null");
 
-            return null;
+            return (
+                <div>
+                    <p className="noChatMsg">Private Barks</p>
+                </div>
+            );
         }
 
         // console.log("this.props at private chatting", this.props);
@@ -67,17 +71,29 @@ class PrivChatting extends Component {
                         ))}
                     </div>
                 )}
-                <div>
+                {this.props.chats.length == 0 && (
+                    <div>
+                        <p className="noChatMsg">No Barks Yet!!</p>
+                    </div>
+                )}
+
+                <div className="chatInput">
                     <textarea
                         rows="3"
                         cols="25"
                         defaultValue={this.props.chat}
                         ref={this.chattext}
                         onChange={e => this.handleChange(e)}
+                        className="chatTextArea"
                     />
-                </div>
-                <div>
-                    <button onClick={this.submitChat}>Send</button>
+                    <div>
+                        <button
+                            onClick={this.submitChat}
+                            className="chatSendButton"
+                        >
+                            Send
+                        </button>
+                    </div>
                 </div>
             </div>
         );
