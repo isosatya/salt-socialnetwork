@@ -28,32 +28,32 @@ function FindPeople() {
 
     return (
         <div className="findPeopleContainer">
-            <label>
-                Search Users
+            <div className="searchArea">
+                <label className="searchLabel">Search Users by Name</label>
                 <input
                     onChange={e => setSearch(e.target.value)}
                     defaultValue={search}
-                    id="findPeopleField"
+                    className="searchFormField"
                 />
-            </label>
-            <div>
                 {error && <p className="errorMsg">{error}</p>}
+            </div>
+            <div className="searchResults">
                 {Array.isArray(users) &&
                     users.map(user => (
                         <React.Fragment key={user.id}>
                             <div>
                                 <Link to={`/user/${user.id}`}>
                                     <div>
-                                        <div>
+                                        <div className="searchProfilePicContainer">
                                             <ProfilePic
                                                 first={user.first}
                                                 last={user.last}
                                                 imgurl={user.imgurl}
                                             />
+                                            <p className="searchNameProfPic">
+                                                {user.first} {user.last}
+                                            </p>
                                         </div>
-                                        <p>
-                                            {user.first} {user.last}
-                                        </p>
                                     </div>
                                 </Link>
                             </div>

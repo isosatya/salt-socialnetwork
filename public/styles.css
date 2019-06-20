@@ -2,22 +2,24 @@
 @import url("https://fonts.googleapis.com/css?family=Noto+Sans+HK&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Acme&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Acme|Gamja+Flower&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap");
 
 /* Celeste     #a9eee6
 Crema       #fefaec
 Rojo        #f38181
 Marron      #625772 */
 
-*  {
+body {
+    margin: 0;
+    background: #fefaec;
 }
 
 a:link {
     text-decoration: none;
 }
 
-body {
-    margin: 0;
-    background: #fefaec;
+a:visited {
+    color: black;
 }
 
 /* ///////////////////////////////// Wrapper login and register masks */
@@ -210,7 +212,7 @@ body {
 
 .profilePicContainer {
     width: 27vw;
-    min-height: 500px;
+    min-height: 450px;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -263,25 +265,25 @@ body {
 
 #bioTextArea {
     background: #62577296;
-    font-family: "Gamja Flower", cursive;
+    font-family: "Roboto Mono", monospace;
     font-size: 20px;
     width: 630px;
     height: 166px;
     border: transparent;
     border-radius: 10px;
+    padding: 10px;
 }
 
 .bioText {
     background: #625772;
     color: white;
-    font-family: "Gamja Flower", cursive;
+    font-family: "Roboto Mono", monospace;
     border: transparent;
     border-radius: 10px;
     padding: 10px;
-    font-size: 25px;
+    font-size: 20px;
     width: 100%;
     height: auto;
-    margin: 0;
 }
 
 #saveBio {
@@ -297,6 +299,60 @@ body {
 
 .otherProfBio {
     width: 90%;
+}
+
+/* /////////////////////////////////////// Search other profiles */
+
+.searchArea {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+}
+
+.searchLabel {
+    width: 175px;
+    font-family: "Noto Sans HK", sans-serif;
+}
+
+.searchFormField {
+    background: #e1f9f6;
+    width: 200px;
+    border: transparent;
+    border-radius: 5px;
+    height: 25px;
+    margin: 30px;
+}
+
+.searchResults {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100vw;
+    justify-content: center;
+}
+
+.searchProfilePicContainer {
+    width: 27vw;
+    min-height: 400px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #f38181;
+    border: transparent;
+    border-radius: 10px;
+    margin-left: 60px;
+    margin-bottom: 50px;
+}
+
+.searchNameProfPic {
+    font-family: "Acme", sans-serif;
+    letter-spacing: 1px;
+    font-size: 25px;
+    margin-top: 15px;
 }
 
 /* ////////////////////////////////////////    Chat windows */
@@ -591,11 +647,43 @@ body {
     align-items: center;
 }
 
-.friendsPageButton {
-    background: #a9eee6;
-}
+/* ///////////////////////////////////// Friendslist page */
 
 .friendsPageContainer {
     display: inline-flex;
     flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: row;
+    width: 100vw;
+}
+
+.friendsListProfContainer {
+    margin-bottom: 40px;
+    margin-left: 20px;
+}
+
+.titleFriendsList {
+    font-family: "Luckiest Guy", cursive;
+    text-align: center;
+    font-size: 40px;
+    letter-spacing: 2px;
+    color: #625772;
+}
+
+.friendsButtonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.friendsPageButton {
+    background: #a9eee6;
+}
+
+.acceptedFriendProfile {
+    background: #a9eee6;
+}
+
+.acceptedFriendButton {
+    background: #f38181;
 }

@@ -201,6 +201,7 @@ app.get("/users/recent", (req, res) => {
 
 app.get("/users/:val", (req, res) => {
     const val = req.params.val;
+
     if (val) {
         db.userSearch(val)
             .then(results => {

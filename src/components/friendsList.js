@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { BrowserRouter, Route, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { receiveFriends } from "./actions";
 import { acceptFriendReq } from "./actions";
@@ -23,54 +24,62 @@ class FriendsList extends Component {
 
         return (
             <div>
-                <h1>Pending Invitations</h1>
+                <p className="titleFriendsList">Pending Buddies</p>
                 <div className="friendsPageContainer">
                     {this.props.wannabes.map(wannabe => (
                         <div key={wannabe.id}>
-                            <div className="profilePicContainer">
-                                <img
-                                    className="profilePic"
-                                    src={
-                                        wannabe.imgurl
-                                            ? wannabe.imgurl
-                                            : "./uglydog.jpg"
-                                    }
-                                    alt={wannabe.first + " " + wannabe.last}
-                                />
-                                <div className="nameProfPic">
-                                    {wannabe.first} {wannabe.last}
+                            <div className="friendsListProfContainer">
+                                <Link to={`/user/${wannabe.id}`}>
+                                    <div className="profilePicContainer">
+                                        <img
+                                            className="profilePic"
+                                            src={
+                                                wannabe.imgurl
+                                                    ? wannabe.imgurl
+                                                    : "./uglydog.jpg"
+                                            }
+                                            alt={
+                                                wannabe.first +
+                                                " " +
+                                                wannabe.last
+                                            }
+                                        />
+                                        <div className="nameProfPic">
+                                            {wannabe.first} {wannabe.last}
+                                        </div>
+                                    </div>
+                                </Link>
+                                <div className="friendsButtonContainer">
+                                    <button
+                                        className="addFriendButton friendsPageButton"
+                                        onClick={e =>
+                                            this.props.dispatch(
+                                                rejectFriendReq(wannabe.id)
+                                            )
+                                        }
+                                    >
+                                        Reject Friend Request
+                                    </button>
+                                    <button
+                                        className="addFriendButton friendsPageButton"
+                                        onClick={e =>
+                                            this.props.dispatch(
+                                                acceptFriendReq(wannabe.id)
+                                            )
+                                        }
+                                    >
+                                        Accept Friend Request
+                                    </button>
                                 </div>
-                            </div>
-                            <div>
-                                <button
-                                    className="addFriendButton friendsPageButton"
-                                    onClick={e =>
-                                        this.props.dispatch(
-                                            rejectFriendReq(wannabe.id)
-                                        )
-                                    }
-                                >
-                                    Reject Friend Request
-                                </button>
-                                <button
-                                    className="addFriendButton friendsPageButton"
-                                    onClick={e =>
-                                        this.props.dispatch(
-                                            acceptFriendReq(wannabe.id)
-                                        )
-                                    }
-                                >
-                                    Accept Friend Request
-                                </button>
                             </div>
                         </div>
                     ))}
                 </div>
-                <h1>Already Friends</h1>
+                <p className="titleFriendsList">Already Buddies</p>
                 <div className="friendsPageContainer">
                     {this.props.friends.map(friend => (
                         <div key={friend.id}>
-                            <div className="profilePicContainer">
+                            <div className="profilePicContainer acceptedFriendProfile">
                                 <img
                                     className="profilePic"
                                     src={
@@ -84,16 +93,18 @@ class FriendsList extends Component {
                                     {friend.first} {friend.last}
                                 </div>
                             </div>
-                            <button
-                                className="addFriendButton friendsPageButton"
-                                onClick={e =>
-                                    this.props.dispatch(
-                                        cancelFriendship(friend.id)
-                                    )
-                                }
-                            >
-                                Unfriend
-                            </button>
+                            <div className="friendsButtonContainer">
+                                <button
+                                    className="addFriendButton friendsPageButton acceptedFriendButton"
+                                    onClick={e =>
+                                        this.props.dispatch(
+                                            cancelFriendship(friend.id)
+                                        )
+                                    }
+                                >
+                                    Unfriend
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>
