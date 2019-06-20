@@ -10,53 +10,9 @@ class PrivChatting extends Component {
         super();
         this.state = { chat: "" };
         this.chattext = React.createRef();
-        this.chatwindow = React.createRef();
+
         this.handleChange = this.handleChange.bind(this);
         this.submitChat = this.submitChat.bind(this);
-    }
-    componentDidMount() {
-        if (this.chatwindow.current) {
-            this.chatwindow.current.offsetParent.scrollTop =
-                this.chatwindow.current.scrollHeight -
-                this.chatwindow.current.offsetParent.clientHeight;
-        }
-    }
-
-    componentDidUpdate() {
-        if (this.chatwindow.current) {
-            // console.log(this.chatwindow);
-
-            // console.log(
-            //     "scroll height PARENT",
-            //     this.chatwindow.current.offsetParent.scrollHeight
-            // );
-            // console.log(
-            //     "client height PARENT",
-            //     this.chatwindow.current.offsetParent.clientHeight
-            // );
-
-            // console.log(
-            //     "this windows scroll height",
-            //     this.chatwindow.current.scrollHeight
-            // );
-            // console.log(
-            //     "this windows client height",
-            //     this.chatwindow.current.clientHeight
-            // );
-
-            // console.log(
-            //     "offsetHeight",
-            //     this.chatwindow.current.offsetParent.offsetHeight
-            // );
-            // console.log(
-            //     "offsetTop",
-            //     this.chatwindow.current.offsetParent.offsetTop
-            // );
-
-            this.chatwindow.current.offsetParent.scrollTop =
-                this.chatwindow.current.scrollHeight -
-                this.chatwindow.current.offsetParent.clientHeight;
-        }
     }
 
     handleChange(e) {
@@ -82,14 +38,12 @@ class PrivChatting extends Component {
         // console.log("this.props at private chatting", this.props);
 
         return (
-            <div className="privChatsContainer">
-                <h1>Private Chats</h1>
-
-                <div className="chatWindow" ref={this.chatwindow}>
-                    {this.props.chats && (
-                        <div>
-                            {this.props.chats.map(chat => (
-                                <div key={chat.id}>
+            <div className="privChatWindow">
+                {this.props.chats && (
+                    <div>
+                        {this.props.chats.map(chat => (
+                            <div key={chat.id}>
+                                <div className="chatPicName">
                                     <img
                                         className="chatProfilePic"
                                         src={
@@ -99,26 +53,31 @@ class PrivChatting extends Component {
                                         }
                                         alt={chat.first + " " + chat.last}
                                     />
-                                    <div>
-                                        <p>{chat.first + " " + chat.last}</p>
-                                        <p>{chat.text}</p>
-                                    </div>
+                                    <p className="chatName">
+                                        {chat.first + " " + chat.last}
+                                    </p>
                                 </div>
-                            ))}
-                        </div>
-                    )}
-                    <div>
-                        <textarea
-                            rows="3"
-                            cols="25"
-                            defaultValue={this.props.chat}
-                            ref={this.chattext}
-                            onChange={e => this.handleChange(e)}
-                        />
+                                <div>
+                                    <p className="chatText">{chat.text}</p>
+                                    <p className="chatDate">
+                                        {chat.created_at}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                    <div>
-                        <button onClick={this.submitChat}>Send</button>
-                    </div>
+                )}
+                <div>
+                    <textarea
+                        rows="3"
+                        cols="25"
+                        defaultValue={this.props.chat}
+                        ref={this.chattext}
+                        onChange={e => this.handleChange(e)}
+                    />
+                </div>
+                <div>
+                    <button onClick={this.submitChat}>Send</button>
                 </div>
             </div>
         );

@@ -334,12 +334,12 @@ server.listen(8080, function() {
 
 //////////////////////////////////////// Socket Events
 const onlineUsers = {};
+function dateFormat(date) {
+    return new Date(date).toLocaleString();
+}
 
 io.on("connection", function(socket) {
     // console.log(`socket with the id ${socket.id} is now connected`);
-
-    const date = new Date("2019-06-19T07:21:13.774Z");
-    console.log("date format", date);
 
     if (!socket.request.session.usersId) {
         return socket.disconnect(true);
@@ -368,6 +368,9 @@ io.on("connection", function(socket) {
 
     db.getRecentChats().then(results => {
         // console.log("results for the getRecentChats query", results.rows);
+        results.rows.map(
+            item => (item.created_at = dateFormat(item.created_at))
+        );
         socket.emit("chatMessages", results.rows.reverse());
     });
 
@@ -378,6 +381,10 @@ io.on("connection", function(socket) {
             // console.log("results for addChatMsg", results.rows);
 
             db.getChatAndUserInfo(usersId, results.rows[0].id).then(results => {
+                results.rows.map(
+                    item => (item.created_at = dateFormat(item.created_at))
+                );
+
                 io.sockets.emit("chatMessage", results.rows[0]);
             });
         });
@@ -393,11 +400,14 @@ io.on("connection", function(socket) {
         }
 
         const recipientSocketId = getSocketIdByUser(onlineUsers, user);
-        console.log(`socketId for user ${user}`, recipientSocketId);
+        // console.log(`socketId for user ${user}`, recipientSocketId);
 
         db.getRecentPrivateChats(usersId, user).then(results => {
             // console.log("results from private chats", results.rows);
             if (user != usersId) {
+                results.rows.map(
+                    item => (item.created_at = dateFormat(item.created_at))
+                );
                 socket.emit("privateChatMsgs", results.rows.reverse());
                 io.sockets.sockets[recipientSocketId].emit(
                     "privateChatMsgs",
@@ -417,7 +427,10 @@ io.on("connection", function(socket) {
                         //     "getPrivateChatAndUserInfo results",
                         //     results.rows[0]
                         // );
-
+                        results.rows.map(
+                            item =>
+                                (item.created_at = dateFormat(item.created_at))
+                        );
                         io.sockets.emit("privateChatMsg", results.rows[0]);
                     }
                 );

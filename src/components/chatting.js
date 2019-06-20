@@ -12,6 +12,7 @@ class Chatting extends Component {
         this.state = { chat: "" };
         this.chattext = React.createRef();
         this.chatwindow = React.createRef();
+        this.chatwindow2 = React.createRef();
         this.handleChange = this.handleChange.bind(this);
         this.submitChat = this.submitChat.bind(this);
     }
@@ -104,18 +105,25 @@ class Chatting extends Component {
                         <div>
                             {this.props.chats.map(chat => (
                                 <div key={chat.id}>
-                                    <img
-                                        className="chatProfilePic"
-                                        src={
-                                            chat.imgurl
-                                                ? chat.imgurl
-                                                : "./uglydog.jpg"
-                                        }
-                                        alt={chat.first + " " + chat.last}
-                                    />
+                                    <div className="chatPicName">
+                                        <img
+                                            className="chatProfilePic"
+                                            src={
+                                                chat.imgurl
+                                                    ? chat.imgurl
+                                                    : "./uglydog.jpg"
+                                            }
+                                            alt={chat.first + " " + chat.last}
+                                        />
+                                        <p className="chatName">
+                                            {chat.first + " " + chat.last}
+                                        </p>
+                                    </div>
                                     <div>
-                                        <p>{chat.first + " " + chat.last}</p>
-                                        <p>{chat.text}</p>
+                                        <p className="chatText">{chat.text}</p>
+                                        <p className="chatDate">
+                                            {chat.created_at}
+                                        </p>
                                     </div>
                                 </div>
                             ))}
@@ -134,7 +142,7 @@ class Chatting extends Component {
                         <button onClick={this.submitChat}>Send</button>
                     </div>
                 </div>
-                <div className="privChats">
+                <div className="privChats" ref={this.chatwindow2}>
                     <PrivChatting />
                 </div>
             </div>
