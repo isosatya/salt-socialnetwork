@@ -142,7 +142,8 @@ app.get("/logout", (req, res) => {
 
 app.get("/delete", (req, res) => {
     const user = req.session.usersId;
-    // db.deletePicsUserDatabase(user);
+    console.log("user for deleting profile", user);
+
     db.getPicsUserDatabase(user).then(results => {
         // console.log(results.rows);
         let images = results.rows.map(image => image.imgurl.slice(39));
@@ -151,6 +152,7 @@ app.get("/delete", (req, res) => {
         db.deletePicsUserDatabase(user).then(() => {
             db.deleteUserFriendships(user).then(() => {
                 db.deleteUser(user).then(() => {
+                    console.log("user delete in backend");
                     req.session = null;
                     res.redirect("/");
                 });
@@ -372,6 +374,8 @@ io.on("connection", function(socket) {
         results.rows.map(
             item => (item.created_at = dateFormat(item.created_at))
         );
+        // console.log("db.getRecentChats", results.rows);
+
         socket.emit("chatMessages", results.rows.reverse());
     });
 
@@ -404,16 +408,18 @@ io.on("connection", function(socket) {
         // console.log(`socketId for user ${user}`, recipientSocketId);
 
         db.getRecentPrivateChats(usersId, user).then(results => {
-            // console.log("results from private chats", results.rows);
             if (user != usersId) {
                 results.rows.map(
                     item => (item.created_at = dateFormat(item.created_at))
                 );
-                socket.emit("privateChatMsgs", results.rows.reverse());
+
+                // console.log("recent private chats", results.rows);
+
                 io.sockets.sockets[recipientSocketId].emit(
                     "privateChatMsgs",
                     results.rows.reverse()
                 );
+                socket.emit("privateChatMsgs", results.rows);
             }
         });
 

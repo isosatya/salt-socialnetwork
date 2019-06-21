@@ -13,12 +13,14 @@ class FriendsList extends Component {
     }
 
     render() {
-        console.log(
-            "this.props.friends in friendsList component",
-            this.props.friends
-        );
+        // console.log(
+        //     "this.props.friends in friendsList component",
+        //     this.props.friends
+        // );
 
         if (!this.props.friends) {
+            console.log("this.props.friends is empty");
+
             return null;
         }
 
@@ -79,20 +81,22 @@ class FriendsList extends Component {
                 <div className="friendsPageContainer">
                     {this.props.friends.map(friend => (
                         <div key={friend.id}>
-                            <div className="profilePicContainer acceptedFriendProfile">
-                                <img
-                                    className="profilePic"
-                                    src={
-                                        friend.imgurl
-                                            ? friend.imgurl
-                                            : "./uglydog.jpg"
-                                    }
-                                    alt={friend.first + " " + friend.last}
-                                />
-                                <div className="nameProfPic">
-                                    {friend.first} {friend.last}
+                            <Link to={`/user/${friend.id}`}>
+                                <div className="profilePicContainer acceptedFriendProfile">
+                                    <img
+                                        className="profilePic"
+                                        src={
+                                            friend.imgurl
+                                                ? friend.imgurl
+                                                : "./uglydog.jpg"
+                                        }
+                                        alt={friend.first + " " + friend.last}
+                                    />
+                                    <div className="nameProfPic">
+                                        {friend.first} {friend.last}
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                             <div className="friendsButtonContainer">
                                 <button
                                     className="addFriendButton friendsPageButton acceptedFriendButton"

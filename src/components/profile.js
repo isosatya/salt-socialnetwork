@@ -8,7 +8,6 @@ import {
 import ProfilePic from "./profilePic";
 import BioEditor from "./bioEditor";
 import axios from "axios";
-import Chatting from "./chatting";
 
 class Profile extends Component {
     constructor(props) {

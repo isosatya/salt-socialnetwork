@@ -54,6 +54,7 @@ class Registration extends Component {
                     <label className="label">Name:</label>
                     <input
                         name="first"
+                        required="required"
                         className="formField"
                         value={this.state.first}
                         onChange={this.handleChange}
@@ -63,6 +64,7 @@ class Registration extends Component {
                     <label className="label">Surname</label>
                     <input
                         name="last"
+                        required="required"
                         className="formField"
                         value={this.state.last}
                         onChange={this.handleChange}
@@ -71,7 +73,9 @@ class Registration extends Component {
                 <div className="formElement">
                     <label className="label">e-Mail</label>
                     <input
+                        type="email"
                         name="email"
+                        required="required"
                         className="formField"
                         value={this.state.email}
                         onChange={this.handleChange}
@@ -80,7 +84,9 @@ class Registration extends Component {
                 <div className="formElement">
                     <label className="label">Password</label>
                     <input
+                        type="password"
                         name="password"
+                        required="required"
                         className="formField"
                         value={this.state.password}
                         onChange={this.handleChange}

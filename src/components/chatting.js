@@ -63,7 +63,7 @@ class Chatting extends Component {
             return null;
         }
 
-        console.log("this.props at chatting", this.props);
+        console.log("this.props.chats at chatting", this.props.chats);
 
         return (
             <div className="chatsContainer">
@@ -116,6 +116,12 @@ class Chatting extends Component {
                                                     : "./uglydog.jpg"
                                             }
                                             alt={chat.first + " " + chat.last}
+                                            onClick={() =>
+                                                socket.emit(
+                                                    "privateChatUser",
+                                                    chat.id
+                                                )
+                                            }
                                         />
                                         <p className="chatName">
                                             {chat.first + " " + chat.last}

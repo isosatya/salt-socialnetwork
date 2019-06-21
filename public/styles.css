@@ -16,7 +16,12 @@ body {
 
 a:link {
     text-decoration: none;
+    color: black;
 }
+
+/* a:active {
+    color: black;
+} */
 
 a:visited {
     color: black;
@@ -235,6 +240,7 @@ a:visited {
     letter-spacing: 1px;
     font-size: 25px;
     margin-top: 15px;
+    text-align: center;
 }
 
 /* ////////////////////////////////////// Bio text  profile */
@@ -682,6 +688,7 @@ a:visited {
 
 .acceptedFriendProfile {
     background: #a9eee6;
+    display: flex;
 }
 
 .acceptedFriendButton {

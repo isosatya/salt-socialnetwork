@@ -22,7 +22,9 @@ class PrivChatting extends Component {
 
     submitChat() {
         if (this.chattext.current.value != "") {
+            console.log("this.state.chat", this.state.chat);
             socket.emit("privateChatMessage", this.state.chat);
+
             // console.log("this.chattext.current", this.chattext);
             this.chattext.current.value = "";
         }
@@ -30,7 +32,7 @@ class PrivChatting extends Component {
 
     render() {
         if (!this.props.chats) {
-            console.log("private this.props.chats is null");
+            // console.log("private this.props.chats is null");
 
             return (
                 <div>

@@ -45,7 +45,9 @@ class Login extends Component {
                 <div className="formElement">
                     <label className="label">e-Mail</label>
                     <input
+                        type="email"
                         name="email"
+                        required="required"
                         className="formField"
                         value={this.state.email}
                         onChange={this.handleChange}
@@ -54,7 +56,9 @@ class Login extends Component {
                 <div className="formElement">
                     <label className="label">Password</label>
                     <input
+                        type="password"
                         name="password"
+                        required="required"
                         className="formField"
                         value={this.state.password}
                         onChange={this.handleChange}
