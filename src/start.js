@@ -23,6 +23,8 @@ import { initSocket } from "./components/socket";
 
 let Elem;
 
+console.log("i am at start.js");
+
 if (location.pathname == "/welcome") {
     Elem = <Wrapper />;
 } else {
