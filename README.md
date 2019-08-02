@@ -1,4 +1,4 @@
-## Social Network project, called "Paw Gang", part of the coding bootcamp at SALT Academy
+## Social Network project and fourth official project (called "Paw Gang") part of the coding bootcamp at SALT Academy
 
 This project was the longest project of the bootcamp, and it was purely done in React.
 The same is much of the style of platforms like Facebook. Users can create their profile, upload and change a profile picture, see the last three users who joined the platform recently and search for other users with the search field option. Users can add other users as friends, and also have friend requests in pending status or even cancel them. There is also a public chat available, where users can also chat with other users privately by clicking on their picture icon.
