@@ -1,32 +1,25 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { receiveFriends } from "./actions";
-import { acceptFriendReq } from "./actions";
-import { rejectFriendReq } from "./actions";
-import { cancelFriendship } from "./actions";
+import { receiveFriends, acceptFriendReq, rejectFriendReq, cancelFriendship } from "./actions";
+import { UI_TEXT, DEFAULT_PROFILE_IMAGE } from "../constants";
 
+// Component displaying user's friends list with pending and accepted friendships
 class FriendsList extends Component {
     componentDidMount() {
-        // in function components: props.dispatch()
+        // Fetch user's friends list from server
         this.props.dispatch(receiveFriends());
     }
 
     render() {
-        // console.log(
-        //     "this.props.friends in friendsList component",
-        //     this.props.friends
-        // );
-
         if (!this.props.friends) {
-            console.log("this.props.friends is empty");
-
+            console.log("Friends list is empty");
             return null;
         }
 
         return (
             <div>
-                <p className="titleFriendsList">Pending Buddies</p>
+                <p className="titleFriendsList">{UI_TEXT.PENDING_BUDDIES}</p>
                 <div className="friendsPageContainer">
                     {this.props.wannabes.map(wannabe => (
                         <div key={wannabe.id}>
@@ -35,19 +28,11 @@ class FriendsList extends Component {
                                     <div className="profilePicContainer">
                                         <img
                                             className="profilePic"
-                                            src={
-                                                wannabe.imgurl
-                                                    ? wannabe.imgurl
-                                                    : "./uglydog.jpg"
-                                            }
-                                            alt={
-                                                wannabe.first +
-                                                " " +
-                                                wannabe.last
-                                            }
+                                            src={wannabe.imgurl || DEFAULT_PROFILE_IMAGE}
+                                            alt={`${wannabe.first} ${wannabe.last}`}
                                         />
                                         <div className="nameProfPic">
-                                            {wannabe.first} {wannabe.last}
+                                            {`${wannabe.first} ${wannabe.last}`}
                                         </div>
                                     </div>
                                 </Link>
@@ -77,7 +62,7 @@ class FriendsList extends Component {
                         </div>
                     ))}
                 </div>
-                <p className="titleFriendsList">Already Buddies</p>
+                <p className="titleFriendsList">{UI_TEXT.ALREADY_BUDDIES}</p>
                 <div className="friendsPageContainer">
                     {this.props.friends.map(friend => (
                         <div key={friend.id}>
@@ -85,15 +70,11 @@ class FriendsList extends Component {
                                 <div className="profilePicContainer acceptedFriendProfile">
                                     <img
                                         className="profilePic"
-                                        src={
-                                            friend.imgurl
-                                                ? friend.imgurl
-                                                : "./uglydog.jpg"
-                                        }
-                                        alt={friend.first + " " + friend.last}
+                                        src={friend.imgurl || DEFAULT_PROFILE_IMAGE}
+                                        alt={`${friend.first} ${friend.last}`}
                                     />
                                     <div className="nameProfPic">
-                                        {friend.first} {friend.last}
+                                        {`${friend.first} ${friend.last}`}
                                     </div>
                                 </div>
                             </Link>
@@ -117,16 +98,12 @@ class FriendsList extends Component {
     }
 }
 
+// Map Redux state to component props
 const mapStateToProps = state => {
-    // console.log("state in map.StateToProps in friendsList component:", state);
-
     return {
-        // call this property however you want --> thats the name the props will receive for this component
-        // listAnimals is coming from the REDUCER file
         friends:
             state.listFriends &&
             state.listFriends.filter(friend => friend.accepted === true),
-
         wannabes:
             state.listFriends &&
             state.listFriends.filter(wannabe => wannabe.accepted === false)

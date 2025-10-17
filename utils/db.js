@@ -1,13 +1,15 @@
 const spicedPg = require("spiced-pg");
-///////////////// this communicates with the local or the web sql database and has to be
-///////////////// specified for each project
+
+// Database connection configuration
+// Uses environment variable in production, local PostgreSQL in development
 const dbUrl =
     process.env.DATABASE_URL ||
     `postgres:postgres:postgres@localhost:5432/salt-socialnetwork`;
-var db = spicedPg(dbUrl);
+const db = spicedPg(dbUrl);
 
-/////////////////////////////////////////////////////////////////////////
+// Database functions for user management and social network features
 
+// Create a new user account with hashed password
 module.exports.addUsers = function addUsers(
     firstName,
     lastName,
@@ -24,6 +26,7 @@ module.exports.addUsers = function addUsers(
     );
 };
 
+// Permanently delete a user account
 module.exports.deleteUser = function deleteUser(id) {
     return db.query(
         `
@@ -34,6 +37,7 @@ module.exports.deleteUser = function deleteUser(id) {
     );
 };
 
+// Retrieve user credentials for login authentication
 module.exports.login = function login(logEmail) {
     return db.query(
         `SELECT id, email, password 
@@ -43,6 +47,7 @@ module.exports.login = function login(logEmail) {
     );
 };
 
+// Get user profile information by ID
 module.exports.getUserInfo = function getUserInfo(id) {
     return db.query(
         `
@@ -54,6 +59,7 @@ module.exports.getUserInfo = function getUserInfo(id) {
     );
 };
 
+// Update user profile picture URL
 module.exports.updateProfilePic = function updateProfilePic(id, url) {
     return db.query(
         `
@@ -65,6 +71,7 @@ module.exports.updateProfilePic = function updateProfilePic(id, url) {
     );
 };
 
+// Update user bio text
 module.exports.updateBio = function updateBio(id, text) {
     return db.query(
         `
@@ -76,6 +83,7 @@ module.exports.updateBio = function updateBio(id, text) {
     );
 };
 
+// Get recently registered users (last 3)
 module.exports.recentUsers = function recentUsers() {
     return db.query(
         `
@@ -86,6 +94,7 @@ module.exports.recentUsers = function recentUsers() {
     );
 };
 
+// Search users by first name (case-insensitive)
 module.exports.userSearch = function userSearch(param) {
     return db.query(
         `SELECT * FROM users 
@@ -94,6 +103,7 @@ module.exports.userSearch = function userSearch(param) {
     );
 };
 
+// Send a friend request from one user to another
 module.exports.sendFriendReq = function sendFriendReq(senderId, receiverId) {
     return db.query(
         `
@@ -105,6 +115,7 @@ module.exports.sendFriendReq = function sendFriendReq(senderId, receiverId) {
     );
 };
 
+// Cancel friendship or friend request between two users
 module.exports.cancelFriendship = function cancelFriendship(
     senderId,
     receiverId
@@ -119,6 +130,7 @@ module.exports.cancelFriendship = function cancelFriendship(
     );
 };
 
+// Accept a pending friend request
 module.exports.acceptFriendship = function acceptFriendship(
     senderId,
     receiverId
@@ -135,6 +147,7 @@ module.exports.acceptFriendship = function acceptFriendship(
     );
 };
 
+// Check friendship status between two users
 module.exports.searchFriendship = function searchFriendship(
     senderId,
     receiverId
@@ -149,6 +162,7 @@ module.exports.searchFriendship = function searchFriendship(
     );
 };
 
+// Get user's friends list (both pending and accepted friendships)
 module.exports.getFriendsList = function getFriendsList(id) {
     return db.query(
         `
@@ -163,6 +177,7 @@ module.exports.getFriendsList = function getFriendsList(id) {
     );
 };
 
+// Get recent public chat messages (last 10)
 module.exports.getRecentChats = function getRecentChats() {
     return db.query(
         ` SELECT users.id, first, last, imgUrl, chats.id, text, chats.created_at
@@ -174,6 +189,7 @@ module.exports.getRecentChats = function getRecentChats() {
     );
 };
 
+// Get recent private chat messages between two users (last 10)
 module.exports.getRecentPrivateChats = function getRecentPrivateChats(
     sender_id,
     receiver_id
@@ -191,6 +207,7 @@ module.exports.getRecentPrivateChats = function getRecentPrivateChats(
     );
 };
 
+// Add a new public chat message
 module.exports.addChatMsg = function addChatMsg(sender_id, text) {
     return db.query(
         `
@@ -202,6 +219,7 @@ module.exports.addChatMsg = function addChatMsg(sender_id, text) {
     );
 };
 
+// Add a new private chat message between two users
 module.exports.addPrivateChatMsg = function addPrivateChatMsg(
     sender_id,
     receiver_id,
@@ -217,6 +235,7 @@ module.exports.addPrivateChatMsg = function addPrivateChatMsg(
     );
 };
 
+// Get chat message with user information for display
 module.exports.getChatAndUserInfo = function getChatAndUserInfo(
     usersid,
     chatsid
@@ -232,6 +251,7 @@ module.exports.getChatAndUserInfo = function getChatAndUserInfo(
     );
 };
 
+// Get private chat message with user information for display
 module.exports.getPrivateChatAndUserInfo = function getPrivateChatAndUserInfo(
     usersid,
     privatechatsid
@@ -247,6 +267,7 @@ module.exports.getPrivateChatAndUserInfo = function getPrivateChatAndUserInfo(
     );
 };
 
+// Add uploaded image to user pictures database
 module.exports.addPicDatabase = function addPicDatabase(user_id, url) {
     return db.query(
         `
@@ -258,6 +279,7 @@ module.exports.addPicDatabase = function addPicDatabase(user_id, url) {
     );
 };
 
+// Get all pictures uploaded by a user
 module.exports.getPicsUserDatabase = function getPicsUserDatabase(user_id) {
     return db.query(
         `
@@ -268,7 +290,8 @@ module.exports.getPicsUserDatabase = function getPicsUserDatabase(user_id) {
     );
 };
 
-module.exports.deletePicsUserDatabase = function deltePicsUserDatabase(
+// Delete all pictures associated with a user
+module.exports.deletePicsUserDatabase = function deletePicsUserDatabase(
     user_id
 ) {
     return db.query(
@@ -280,6 +303,7 @@ module.exports.deletePicsUserDatabase = function deltePicsUserDatabase(
     );
 };
 
+// Delete all friendships associated with a user
 module.exports.deleteUserFriendships = function deleteUserFriendships(id) {
     return db.query(
         `
@@ -290,6 +314,7 @@ module.exports.deleteUserFriendships = function deleteUserFriendships(id) {
     );
 };
 
+// Get user information for online users by their IDs
 module.exports.onlineUsersInfo = function onlineUsersInfo(arrayOfIds) {
     const query = `SELECT id, first, last, imgUrl FROM users WHERE id = ANY($1)`;
     return db.query(query, [arrayOfIds]);
