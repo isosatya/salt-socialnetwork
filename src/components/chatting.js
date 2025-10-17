@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-///////////////////////// For the Socket events to work
 import { socket } from "./socket";
 import PrivChatting from "./privChatting";
+import { UI_TEXT, DEFAULT_PROFILE_IMAGE } from "../constants";
 
 //////////////////////////////////
 
+// Main chat component handling public chat messages and online users
 class Chatting extends Component {
     constructor() {
         super();
@@ -17,27 +18,17 @@ class Chatting extends Component {
         this.submitChat = this.submitChat.bind(this);
     }
     componentDidMount() {
-        // console.log(
-        //     "this windows scroll",
-        //     this.chatwindow.current.scrollHeight
-        // );
-
-        if (this.chatwindow.current) {
-            this.chatwindow.current.scrollTop =
-                this.chatwindow.current.scrollHeight -
-                this.chatwindow.current.clientHeight;
-        }
+        // Auto-scroll to bottom of chat window
+        this.scrollToBottom();
     }
 
     componentDidUpdate() {
-        // console.log(
-        //     "this windows scroll height",
-        //     this.chatwindow.current.scrollHeight
-        // );
-        // console.log(
-        //     "this windows client height",
-        //     this.chatwindow.current.clientHeight
-        // );
+        // Auto-scroll to bottom when new messages arrive
+        this.scrollToBottom();
+    }
+
+    // Helper method to scroll chat window to bottom
+    scrollToBottom() {
         if (this.chatwindow.current) {
             this.chatwindow.current.scrollTop =
                 this.chatwindow.current.scrollHeight -
@@ -47,13 +38,11 @@ class Chatting extends Component {
 
     handleChange(e) {
         this.setState({ chat: e.target.value });
-        // console.log("this.state.chat", this.state.chat);
     }
 
     submitChat() {
-        if (this.chattext.current.value != "") {
+        if (this.chattext.current.value !== "") {
             socket.emit("chatMessage", this.state.chat);
-            // console.log("this.chattext.current", this.chattext);
             this.chattext.current.value = "";
         }
     }
@@ -67,11 +56,8 @@ class Chatting extends Component {
 
         return (
             <div className="chatsContainer">
-                <div
-                    className="onlineUsers"
-                    // onClick={e => console.log("e.target user", e.target)}
-                >
-                    <h1 className="onlineTitle">Mobsters Online</h1>
+                <div className="onlineUsers">
+                    <h1 className="onlineTitle">{UI_TEXT.MOBSTERS_ONLINE}</h1>
                     {this.props.users && (
                         <div>
                             {this.props.users.map(user => (
@@ -85,16 +71,12 @@ class Chatting extends Component {
                                     <div className="dot" />
                                     <img
                                         className="onlineProfilePic"
-                                        src={
-                                            user.imgurl
-                                                ? user.imgurl
-                                                : "./uglydog.jpg"
-                                        }
-                                        alt={user.first + " " + user.last}
+                                        src={user.imgurl || DEFAULT_PROFILE_IMAGE}
+                                        alt={`${user.first} ${user.last}`}
                                     />
                                     <div>
                                         <p className="onlineName">
-                                            {user.first + " " + user.last}
+                                            {`${user.first} ${user.last}`}
                                         </p>
                                     </div>
                                 </div>
@@ -110,12 +92,8 @@ class Chatting extends Component {
                                     <div className="chatPicName">
                                         <img
                                             className="chatProfilePic"
-                                            src={
-                                                chat.imgurl
-                                                    ? chat.imgurl
-                                                    : "./uglydog.jpg"
-                                            }
-                                            alt={chat.first + " " + chat.last}
+                                            src={chat.imgurl || DEFAULT_PROFILE_IMAGE}
+                                            alt={`${chat.first} ${chat.last}`}
                                             onClick={() =>
                                                 socket.emit(
                                                     "privateChatUser",
@@ -124,7 +102,7 @@ class Chatting extends Component {
                                             }
                                         />
                                         <p className="chatName">
-                                            {chat.first + " " + chat.last}
+                                            {`${chat.first} ${chat.last}`}
                                         </p>
                                     </div>
                                     <div>
@@ -169,10 +147,8 @@ class Chatting extends Component {
 //     axios.post("/updatebio", { bio: this.state.bio });
 // }
 
+// Map Redux state to component props
 const mapStateToProps = state => {
-    // console.log("state in map.StateToProps in friendsList component:", state);
-    // console.log("state for chats", state.onlineusers);
-
     return {
         chats: state.chats,
         users: state.onlineusers

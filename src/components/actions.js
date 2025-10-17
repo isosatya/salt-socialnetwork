@@ -1,90 +1,92 @@
 import axios from "axios";
+import { ACTION_TYPES } from "../constants";
 
-// all ajax requests will go in this file
-// an action should always return an OBJECT
+// Redux action creators for managing application state
+// All AJAX requests and state updates are handled here
 
-// export function getListOfAnimals() {
-//     return axios.get("/get-list-animals").then(({ data }) => {
-//         console.log("data in getListOfAnimals:", data);
-//         return {
-//             type: "ADD_LIST_ANIMALS",
-//             listAnimals: data
-//         };
-//     });
-// }
 
+// Fetch and store user's friends list in Redux state
 export async function receiveFriends() {
     const { data } = await axios.get("/friendslist");
-    console.log("friends list query results", data);
+    console.log("Friends list query results:", data);
 
     return {
-        type: "RECEIVE_FRIENDS",
+        type: ACTION_TYPES.RECEIVE_FRIENDS,
         friendsList: data
     };
 }
 
+// Accept a friend request and update Redux state
 export async function acceptFriendReq(id) {
-    const { data } = await axios.post(`/acceptfriendship/${id}`);
+    await axios.post(`/acceptfriendship/${id}`);
     return {
-        type: "ACCEPT_FRIEND",
+        type: ACTION_TYPES.ACCEPT_FRIEND,
         id
     };
 }
 
+// Cancel friendship and update Redux state
 export async function cancelFriendship(id) {
-    const { data } = await axios.post(`/cancelfriendship/${id}`);
+    await axios.post(`/cancelfriendship/${id}`);
     return {
-        type: "CANCEL_FRIENDSHIP",
+        type: ACTION_TYPES.CANCEL_FRIENDSHIP,
         id
     };
 }
 
+// Reject a friend request and update Redux state
 export async function rejectFriendReq(id) {
-    const { data } = await axios.post(`/cancelfriendship/${id}`);
+    await axios.post(`/cancelfriendship/${id}`);
     return {
-        type: "REJECT_FRIEND",
+        type: ACTION_TYPES.REJECT_FRIEND,
         id
     };
 }
 
-export async function chatMessages(msgs) {
+// Store recent chat messages in Redux state
+export function chatMessages(msgs) {
     return {
-        type: "RECENT_CHATS",
+        type: ACTION_TYPES.RECENT_CHATS,
         chats: msgs
     };
 }
 
-export async function chatMessage(msg) {
+// Add new chat message to Redux state
+export function chatMessage(msg) {
     return {
-        type: "NEW_CHAT",
+        type: ACTION_TYPES.NEW_CHAT,
         chat: msg
     };
 }
 
-export async function onlineUsers(users) {
+// Update online users list in Redux state
+export function onlineUsers(users) {
     return {
-        type: "ONLINE_USERS",
+        type: ACTION_TYPES.ONLINE_USERS,
         onlineusers: users
     };
 }
 
-export async function userJoinedOrLeft(users) {
+// Update online users when someone joins or leaves (same as onlineUsers)
+export function userJoinedOrLeft(users) {
     return {
-        type: "ONLINE_USERS",
+        type: ACTION_TYPES.ONLINE_USERS,
         onlineusers: users
     };
 }
 
-export async function privateChatMessages(priv_msgs) {
+// Store recent private chat messages in Redux state
+export function privateChatMessages(privMsgs) {
     return {
-        type: "RECENT_PRIV_CHATS",
-        priv_chats: priv_msgs
+        type: ACTION_TYPES.RECENT_PRIV_CHATS,
+        priv_chats: privMsgs
     };
 }
 
-export async function privateChatMessage(priv_msg) {
+// Add new private chat message to Redux state
+export function privateChatMessage(privMsg) {
     return {
-        type: "NEW_PRIV_CHAT",
-        priv_chat: priv_msg
+        type: ACTION_TYPES.NEW_PRIV_CHAT,
+        priv_chat: privMsg
     };
 }

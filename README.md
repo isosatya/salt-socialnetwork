@@ -1,7 +1,34 @@
-## Social Network project and fourth official project (called "Paw Gang") part of the coding bootcamp at SALT Academy
+# Paw Gang - Social Network for Criminal Dogs
 
-This project was the longest project of the bootcamp, and it was purely done in React.
+## First Fullstack project in the form of a Social Network, called "Paw Gang" - a social network for criminal dogs, part of the coding bootcamp at SPICED Academy
+
+This project was done in React.
 The same is much of the style of platforms like Facebook. Users can create their profile, upload and change a profile picture, see the last three users who joined the platform recently and search for other users with the search field option. Users can add other users as friends, and also have friend requests in pending status or even cancel them. There is also a public chat available, where users can also chat with other users privately by clicking on their picture icon.
+
+## Key Features
+
+### User Management
+- **Registration**: Create new user accounts with email/password
+- **Login**: Authenticate users with session management  
+- **Profile**: View and edit user profiles with bio and profile pictures
+- **Account Deletion**: Complete user data removal
+
+### Social Features
+- **User Search**: Find users by name with real-time search functionality
+- **Friend System**: Send, accept, reject, and cancel friend requests
+- **Friends List**: View pending and accepted friendships with status management
+- **Recent Users**: See the last three users who joined the platform
+
+### Real-time Chat
+- **Public Chat**: Global chat room for all users to communicate
+- **Private Chat**: One-on-one messaging between friends by clicking on profile pictures
+- **Online Status**: See who's currently online in real-time
+- **Message History**: Recent messages loaded automatically on connection
+
+### File Management
+- **Profile Pictures**: Upload and change profile images
+- **Image Storage**: Local temporary storage + AWS S3 permanent storage
+- **File Cleanup**: Automatic cleanup of user images on account deletion
 
 ### Login mask:
 
@@ -30,3 +57,41 @@ The same is much of the style of platforms like Facebook. Users can create their
 ### Public and private chat:
 
 <img width="1277" alt="Screenshot 2019-08-01 at 11 15 54" src="https://user-images.githubusercontent.com/29626222/62281564-49326900-b44e-11e9-833f-15129885309f.png">
+
+
+## Architecture
+
+### Backend (Node.js/Express)
+- **Server**: `index.js` - Main Express server with Socket.io integration
+- **Database**: PostgreSQL with `spiced-pg` for database operations
+- **Authentication**: Session-based authentication with bcrypt password hashing
+- **File Upload**: Multer for local storage + AWS S3 for cloud storage
+- **Real-time**: Socket.io for live chat functionality
+
+### Frontend (React)
+- **State Management**: Redux for global state management
+- **Routing**: React Router for client-side navigation
+- **Components**: Class-based React components with lifecycle methods
+- **Real-time**: Socket.io client for live updates
+
+## Security Features
+- Password hashing with bcrypt
+- Session-based authentication
+- Input validation on server routes
+- File upload size limits
+- SQL injection prevention with parameterized queries
+
+## File Structure
+```
+├── index.js              # Main server file
+├── src/
+│   ├── App.js           # Main React component
+│   ├── start.js         # React app entry point
+│   ├── constants.js     # Application constants
+│   └── components/      # React components
+├── utils/
+│   ├── db.js           # Database functions
+│   └── bc.js           # Password hashing utilities
+├── public/             # Static assets
+└── uploads/            # Temporary file storage
+```

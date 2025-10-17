@@ -1,39 +1,41 @@
-import React, { Component } from "react";
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
+import { UI_TEXT, DEFAULT_PROFILE_IMAGE } from "../constants";
 
+// Header component displaying app logo, navigation menu, and user info
 function Header({ imgurl, first, last }) {
     return (
         <div className="headerContainer">
             <div className="headerLogo">
                 <p className="textHeaderLogo" id="paw">
-                    Paw
+                    {UI_TEXT.APP_NAME.split(' ')[0]}
                 </p>
-                <img src="/paw.png" id="pawHeaderLogo" />
+                <img src="/paw.png" id="pawHeaderLogo" alt="Paw logo" />
                 <p className="textHeaderLogo" id="gang">
-                    Gang
+                    {UI_TEXT.APP_NAME.split(' ')[1]}
                 </p>
             </div>
             <div className="menuContainer">
                 <Link to={`/`}>
-                    <p className="menuHeader">Profile</p>
+                    <p className="menuHeader">{UI_TEXT.PROFILE}</p>
                 </Link>
                 <Link to={`/friends`}>
-                    <p className="menuHeader">Gang Buddies</p>
+                    <p className="menuHeader">{UI_TEXT.GANG_BUDDIES}</p>
                 </Link>
                 <Link to={`/users/`}>
-                    <p className="menuHeader">Search Mobsters</p>
+                    <p className="menuHeader">{UI_TEXT.SEARCH_MOBSTERS}</p>
                 </Link>
                 <Link to={`/chat`}>
-                    <p className="menuHeader">Bark Chat</p>
+                    <p className="menuHeader">{UI_TEXT.BARK_CHAT}</p>
                 </Link>
             </div>
             <div className="headerPicContainer">
-                <p className="headerMessage">Welcome,</p>
-                <p className="headerMessage">{first + " " + last}</p>
+                <p className="headerMessage">{UI_TEXT.WELCOME_MESSAGE}</p>
+                <p className="headerMessage">{`${first} ${last}`}</p>
                 <img
                     className="headerPic"
-                    src={imgurl ? imgurl : "./uglydog.jpg"}
-                    alt={first + " " + last}
+                    src={imgurl || DEFAULT_PROFILE_IMAGE}
+                    alt={`${first} ${last}`}
                 />
             </div>
         </div>

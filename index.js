@@ -4,26 +4,24 @@ const compression = require("compression");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const db = require("./utils/db");
-const bc = require("./utils/bc"); // BECRYPT FOR HASHING AND CHECKING PASSWORDS
-var cookieSession = require("cookie-session");
+const bc = require("./utils/bc");
+const cookieSession = require("cookie-session");
 
-////////////////////// SETTINGS FOR SOCKET (CHAT)
+// Socket.io server setup for real-time chat functionality
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
     origins: "localhost:8080 127.0.0.1:8080/"
 });
-///////////////////////////
 
-//////////////////////////////////////////// Image upload settings
-// const for constructing the url address
-const urlPrefx = "https://s3.amazonaws.com/andres-spiced/";
-// This is the module that uploads the image to Amazon
+// Image upload configuration for S3 and local storage
+const urlPrefix = "https://s3.amazonaws.com/andres-spiced/";
 const s3 = require("./s3");
-var multer = require("multer");
-var uidSafe = require("uid-safe");
-var path = require("path");
-// This uploads the image to the local storate
-var diskStorage = multer.diskStorage({
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+const path = require("path");
+
+// Local disk storage configuration for temporary file uploads
+const diskStorage = multer.diskStorage({
     destination: function(req, file, callback) {
         callback(null, __dirname + "/uploads");
     },
@@ -33,14 +31,14 @@ var diskStorage = multer.diskStorage({
         });
     }
 });
-// These are the parameters for the upload
-var uploader = multer({
+// Multer configuration for file uploads
+const uploader = multer({
     storage: diskStorage,
     limits: {
         fileSize: 2097152
     }
 });
-//////////////////////////////////////////// Cookie and Socket settings
+// Session and cookie configuration
 
 app.use(cookieParser());
 
@@ -67,7 +65,7 @@ app.use(
 app.use(bodyParser.json());
 app.use(compression());
 
-//////////////////////////////  Bundle Server
+// Development vs production bundle handling
 
 if (process.env.NODE_ENV != "production") {
     app.use(
@@ -80,13 +78,11 @@ if (process.env.NODE_ENV != "production") {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
 
-//////////////////////////////////////////////   Routes
+// API Routes
 
+// User registration endpoint - creates new user account with hashed password
 app.post("/register", function(req, res) {
-    var first = req.body.first;
-    var last = req.body.last;
-    var email = req.body.email;
-    var password = req.body.password;
+    const { first, last, email, password } = req.body;
     bc.hashPassword(password)
         .then(hash => {
             db.addUsers(first, last, email, hash)
@@ -109,11 +105,9 @@ app.post("/register", function(req, res) {
         });
 });
 
+// User login endpoint - authenticates user credentials
 app.post("/login", (req, res) => {
-    // console.log("req. body for login", req.body);
-
-    var email = req.body.email;
-    var password = req.body.password;
+    const { email, password } = req.body;
     db.login(email)
         .then(match => {
             bc.checkPassword(password, match.rows[0].password)
@@ -140,176 +134,215 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
+// User account deletion endpoint - removes user data and associated files
 app.get("/delete", (req, res) => {
-    const user = req.session.usersId;
-    console.log("user for deleting profile", user);
+    const userId = req.session.usersId;
+    console.log("Deleting user profile:", userId);
 
-    db.getPicsUserDatabase(user).then(results => {
-        // console.log(results.rows);
-        let images = results.rows.map(image => image.imgurl.slice(39));
-        // console.log("images", images);
+    db.getPicsUserDatabase(userId).then(results => {
+        const images = results.rows.map(image => image.imgurl.slice(39));
         s3.delete(images);
-        db.deletePicsUserDatabase(user).then(() => {
-            db.deleteUserFriendships(user).then(() => {
-                db.deleteUser(user).then(() => {
-                    console.log("user delete in backend");
+        
+        db.deletePicsUserDatabase(userId).then(() => {
+            db.deleteUserFriendships(userId).then(() => {
+                db.deleteUser(userId).then(() => {
+                    console.log("User successfully deleted from backend");
                     req.session = null;
                     res.redirect("/");
                 });
-                // console.log("friendships deleted");
             });
         });
     });
 });
 
+// Get current user information endpoint
 app.get("/user", (req, res) => {
     db.getUserInfo(req.session.usersId)
         .then(results => {
             res.json(results.rows);
         })
         .catch(err => {
-            console.log("Error at the getUserInfo Query", err);
+            console.log("Error retrieving user info:", err);
+            res.status(500).json({ error: "Failed to retrieve user information" });
         });
 });
 
+// Get other user profile information endpoint
 app.get("/otheruser/:id", (req, res) => {
-    const id = req.params.id;
-    if (id == req.session.usersId) {
-        res.json({ error: 1 });
+    const userId = req.params.id;
+    
+    if (userId == req.session.usersId) {
+        res.json({ error: 1 }); // Cannot view own profile through this endpoint
     } else {
-        db.getUserInfo(id)
+        db.getUserInfo(userId)
             .then(results => {
-                if (results.rows.length == 0) {
-                    res.json({ error: 2 });
+                if (results.rows.length === 0) {
+                    res.json({ error: 2 }); // User not found
                 } else {
                     res.json(results.rows);
                 }
             })
             .catch(err => {
-                console.log("Error at the getUserInfo Query", err);
+                console.log("Error retrieving other user info:", err);
+                res.status(500).json({ error: "Failed to retrieve user information" });
             });
     }
 });
 
+// Get recently registered users endpoint
 app.get("/users/recent", (req, res) => {
     db.recentUsers()
         .then(results => {
             res.json(results.rows);
         })
         .catch(err => {
-            console.log("Error at the recentUsers query", err);
+            console.log("Error retrieving recent users:", err);
+            res.status(500).json({ error: "Failed to retrieve recent users" });
         });
 });
 
+// Search users by name endpoint
 app.get("/users/:val", (req, res) => {
-    const val = req.params.val;
+    const searchTerm = req.params.val;
 
-    if (val) {
-        db.userSearch(val)
+    if (searchTerm) {
+        db.userSearch(searchTerm)
             .then(results => {
-                if (results.rows.length == 0) {
-                    res.json({ error: 2 });
+                if (results.rows.length === 0) {
+                    res.json({ error: 2 }); // No users found
                 } else {
-                    // console.log("results of search", results.rows);
                     res.json(results.rows);
                 }
             })
             .catch(err => {
-                console.log("Error at the userSearch query", err);
+                console.log("Error searching users:", err);
+                res.status(500).json({ error: "Failed to search users" });
             });
     } else {
         res.redirect("/users/recent");
     }
 });
 
+// Check friendship status between users endpoint
 app.post("/friendship/:id", (req, res) => {
     const loggedUserId = req.session.usersId;
-    const receiverId = req.params.id;
-    db.searchFriendship(loggedUserId, receiverId).then(results => {
-        if (results.rows.length == 0) {
-            // No frienship or friendship request
-            res.json({ status: 1 });
+    const targetUserId = req.params.id;
+    
+    db.searchFriendship(loggedUserId, targetUserId).then(results => {
+        if (results.rows.length === 0) {
+            res.json({ status: 1 }); // No friendship or request exists
         } else {
-            if (results.rows[0].accepted == false) {
-                // No friendship, but there is friendship request
-                if (loggedUserId == results.rows[0].receiver_id) {
-                    // Request sent by the profile owner
-                    res.json({ status: 2 });
+            const friendship = results.rows[0];
+            if (friendship.accepted === false) {
+                if (loggedUserId === friendship.receiver_id) {
+                    res.json({ status: 2 }); // Request sent by current user
                 } else {
-                    // request received by profile owner
-                    res.json({ status: 3 });
+                    res.json({ status: 3 }); // Request received by current user
                 }
-            } else if (results.rows[0].accepted == true) {
-                // Unfriend
-                res.json({ status: 4 });
+            } else if (friendship.accepted === true) {
+                res.json({ status: 4 }); // Already friends (unfriend option)
             }
         }
+    }).catch(err => {
+        console.log("Error checking friendship status:", err);
+        res.status(500).json({ error: "Failed to check friendship status" });
     });
 });
 
+// Send friend request endpoint
 app.post("/sendfriendreq/:id", (req, res) => {
     const senderId = req.session.usersId;
     const receiverId = req.params.id;
+    
     db.sendFriendReq(senderId, receiverId).then(results => {
-        if (results.rows.length != 0) {
+        if (results.rows.length !== 0) {
             res.json({ success: true });
         } else {
-            res.json({ success: "" });
+            res.json({ success: false });
         }
+    }).catch(err => {
+        console.log("Error sending friend request:", err);
+        res.status(500).json({ error: "Failed to send friend request" });
     });
 });
 
+// Cancel friendship or friend request endpoint
 app.post("/cancelfriendship/:id", (req, res) => {
     const senderId = req.session.usersId;
     const receiverId = req.params.id;
+    
     db.cancelFriendship(senderId, receiverId).then(() => {
         res.json({ success: true });
+    }).catch(err => {
+        console.log("Error canceling friendship:", err);
+        res.status(500).json({ error: "Failed to cancel friendship" });
     });
 });
 
+// Accept friend request endpoint
 app.post("/acceptfriendship/:id", (req, res) => {
     const senderId = req.session.usersId;
     const receiverId = req.params.id;
+    
     db.acceptFriendship(senderId, receiverId).then(results => {
-        if (results.rows[0].accepted == true) {
+        if (results.rows[0].accepted === true) {
             res.json({ success: true });
         } else {
-            res.json({ success: "" });
+            res.json({ success: false });
         }
+    }).catch(err => {
+        console.log("Error accepting friendship:", err);
+        res.status(500).json({ error: "Failed to accept friendship" });
     });
 });
 
+// Profile picture upload endpoint
 app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
-    var url = urlPrefx + req.file.filename;
-    var id = req.session.usersId;
-    db.updateProfilePic(id, url)
+    const imageUrl = urlPrefix + req.file.filename;
+    const userId = req.session.usersId;
+    
+    db.updateProfilePic(userId, imageUrl)
         .then(() => {
-            db.addPicDatabase(id, url);
-            res.json(url);
+            return db.addPicDatabase(userId, imageUrl);
         })
-        .catch(err => console.log("Error at UpdateProfilePic", err));
+        .then(() => {
+            res.json(imageUrl);
+        })
+        .catch(err => {
+            console.log("Error updating profile picture:", err);
+            res.status(500).json({ error: "Failed to update profile picture" });
+        });
 });
 
+// Update user bio endpoint
 app.post("/updatebio", (req, res) => {
-    var id = req.session.usersId;
-    var bio = req.body.bio;
-    db.updateBio(id, bio)
+    const userId = req.session.usersId;
+    const bio = req.body.bio;
+    
+    db.updateBio(userId, bio)
         .then(response => res.json(response))
-        .catch(err => console.log("Error at the updateBio query", err));
+        .catch(err => {
+            console.log("Error updating bio:", err);
+            res.status(500).json({ error: "Failed to update bio" });
+        });
 });
 
-//////////// REDUX example
-
+// Example endpoint for Redux demonstration
 app.get("/get-list-animals", (req, res) => {
-    let animals = ["dogs", "cats", "otters", "seagulls"];
+    const animals = ["dogs", "cats", "otters", "seagulls"];
     res.json(animals);
 });
 
+// Get user's friends list endpoint
 app.get("/friendslist", (req, res) => {
-    const id = req.session.usersId;
-    db.getFriendsList(id).then(results => {
-        console.log("results for getFriendsList query", results.rows);
+    const userId = req.session.usersId;
+    
+    db.getFriendsList(userId).then(results => {
+        console.log("Friends list query results:", results.rows);
         res.json(results.rows);
+    }).catch(err => {
+        console.log("Error retrieving friends list:", err);
+        res.status(500).json({ error: "Failed to retrieve friends list" });
     });
 });
 
@@ -329,142 +362,116 @@ app.get("*", function(req, res) {
     }
 });
 
-// We change "app.listen" with "server.listen" so we can use the Socket functionality
-// it's server, not app, that does the listening
+// Start server with socket.io support
 server.listen(8080, function() {
-    console.log("I'm listening.");
+    console.log("Server listening on port 8080");
 });
 
-//////////////////////////////////////// Socket Events
+// Socket.io event handlers for real-time chat functionality
 const onlineUsers = {};
-function dateFormat(date) {
+
+// Helper function to format dates for display
+function formatDate(date) {
     return new Date(date).toLocaleString();
 }
 
+// Handle new socket connections
 io.on("connection", function(socket) {
-    // console.log(`socket with the id ${socket.id} is now connected`);
-
+    // Require user authentication for socket connection
     if (!socket.request.session.usersId) {
         return socket.disconnect(true);
     }
-    const usersId = socket.request.session.usersId;
-    // console.log(
-    //     `socket with the id ${socket.id} is now connected with user ${usersId}`
-    // );
-    // console.log("online users", onlineUsers);
+    
+    const userId = socket.request.session.usersId;
+    console.log(`User ${userId} connected with socket ${socket.id}`);
 
+    // Add user to online users list if not already present
     const onlineUsersArray = Object.values(onlineUsers);
+    const userAlreadyOnline = onlineUsersArray.find(user => user === userId);
 
-    const found = onlineUsersArray.find(user => {
-        return user == usersId;
-    });
-
-    if (!found) {
-        onlineUsers[socket.id] = usersId;
+    if (!userAlreadyOnline) {
+        onlineUsers[socket.id] = userId;
     }
 
+    // Broadcast updated online users list to all connected clients
     db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
-        // console.log("onlineUsersInfo query results", results.rows);
-        // socket.emit("onlineUsers", results.rows); //--> emit does the job
         io.sockets.emit("userJoinedOrLeft", results.rows);
     });
 
+    // Send recent chat messages to newly connected user
     db.getRecentChats().then(results => {
-        // console.log("results for the getRecentChats query", results.rows);
-        results.rows.map(
-            item => (item.created_at = dateFormat(item.created_at))
-        );
-        // console.log("db.getRecentChats", results.rows);
-
+        results.rows.forEach(item => {
+            item.created_at = formatDate(item.created_at);
+        });
         socket.emit("chatMessages", results.rows.reverse());
     });
 
+    // Handle new chat messages
     socket.on("chatMessage", msg => {
-        // console.log("listened to chatMessage event ", msg);
-
-        db.addChatMsg(usersId, msg).then(results => {
-            // console.log("results for addChatMsg", results.rows);
-
-            db.getChatAndUserInfo(usersId, results.rows[0].id).then(results => {
-                results.rows.map(
-                    item => (item.created_at = dateFormat(item.created_at))
-                );
-
-                io.sockets.emit("chatMessage", results.rows[0]);
+        db.addChatMsg(userId, msg).then(results => {
+            return db.getChatAndUserInfo(userId, results.rows[0].id);
+        }).then(results => {
+            results.rows.forEach(item => {
+                item.created_at = formatDate(item.created_at);
             });
+            io.sockets.emit("chatMessage", results.rows[0]);
+        }).catch(err => {
+            console.log("Error handling chat message:", err);
         });
     });
 
-    socket.on("privateChatUser", user => {
-        // console.log("usersId who is logged in", usersId);
-        // console.log("other user from chat", user);
-        // console.log("online users table", onlineUsers);
-
-        function getSocketIdByUser(object, value) {
-            return Object.keys(object).find(key => object[key] === value);
+    // Handle private chat initiation
+    socket.on("privateChatUser", targetUserId => {
+        // Helper function to find socket ID by user ID
+        function getSocketIdByUserId(onlineUsersObj, userId) {
+            return Object.keys(onlineUsersObj).find(key => onlineUsersObj[key] === userId);
         }
 
-        const recipientSocketId = getSocketIdByUser(onlineUsers, user);
-        // console.log(`socketId for user ${user}`, recipientSocketId);
+        const recipientSocketId = getSocketIdByUserId(onlineUsers, targetUserId);
 
-        db.getRecentPrivateChats(usersId, user).then(results => {
-            if (user != usersId) {
-                results.rows.map(
-                    item => (item.created_at = dateFormat(item.created_at))
-                );
+        // Load recent private chat history
+        db.getRecentPrivateChats(userId, targetUserId).then(results => {
+            if (targetUserId !== userId) {
+                results.rows.forEach(item => {
+                    item.created_at = formatDate(item.created_at);
+                });
 
-                // console.log("recent private chats", results.rows);
-
-                io.sockets.sockets[recipientSocketId].emit(
-                    "privateChatMsgs",
-                    results.rows.reverse()
-                );
+                // Send chat history to both users
+                if (recipientSocketId && io.sockets.sockets[recipientSocketId]) {
+                    io.sockets.sockets[recipientSocketId].emit(
+                        "privateChatMsgs",
+                        results.rows.reverse()
+                    );
+                }
                 socket.emit("privateChatMsgs", results.rows);
             }
         });
 
+        // Handle private chat messages
         socket.on("privateChatMessage", msg => {
-            // console.log("listened private to chatMessage event ", msg);
-
-            db.addPrivateChatMsg(usersId, user, msg).then(results => {
-                // console.log("results for addChatMsg", results.rows);
-                db.getPrivateChatAndUserInfo(usersId, results.rows[0].id).then(
-                    results => {
-                        // console.log(
-                        //     "getPrivateChatAndUserInfo results",
-                        //     results.rows[0]
-                        // );
-                        results.rows.map(
-                            item =>
-                                (item.created_at = dateFormat(item.created_at))
-                        );
-                        io.sockets.emit("privateChatMsg", results.rows[0]);
-                    }
-                );
+            db.addPrivateChatMsg(userId, targetUserId, msg).then(results => {
+                return db.getPrivateChatAndUserInfo(userId, results.rows[0].id);
+            }).then(results => {
+                results.rows.forEach(item => {
+                    item.created_at = formatDate(item.created_at);
+                });
+                io.sockets.emit("privateChatMsg", results.rows[0]);
+            }).catch(err => {
+                console.log("Error handling private chat message:", err);
             });
         });
     });
 
+    // Handle user disconnection
     socket.on("disconnect", function() {
-        // console.log(
-        //     `socket with the id ${
-        //         socket.id
-        //     } is now disconnected with user ${usersId}`
-        // );
-
+        console.log(`User ${userId} disconnected (socket ${socket.id})`);
+        
         delete onlineUsers[socket.id];
 
+        // Broadcast updated online users list
         db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
-            // console.log("onlineUsersInfo query results", results.rows);
-            socket.emit("onlineUsers", results.rows);
             io.sockets.emit("userJoinedOrLeft", results.rows);
         });
     });
 
-    // socket.on("thanks", function(data) {
-    //     console.log(data);
-    // });
-    // socket.emit("welcome", {
-    //     message: "Welome. It is nice to see you"
-    // });
 });

@@ -1,53 +1,52 @@
 import * as io from "socket.io-client";
-import { chatMessages } from "./actions";
-import { chatMessage } from "./actions";
-import { onlineUsers } from "./actions";
-import { userJoinedOrLeft } from "./actions";
-import { privateChatMessages } from "./actions";
-import { privateChatMessage } from "./actions";
+import { 
+    chatMessages, 
+    chatMessage, 
+    onlineUsers, 
+    userJoinedOrLeft, 
+    privateChatMessages, 
+    privateChatMessage 
+} from "./actions";
+import { SOCKET_EVENTS } from "../constants";
 
+// Socket.io client instance for real-time communication
 export let socket;
 
+// Initialize socket connection and set up event listeners
 export function initSocket(store) {
     if (!socket) {
         socket = io.connect();
     }
 
-    socket.on("chatMessages", msgs => {
+    // Listen for recent chat messages
+    socket.on(SOCKET_EVENTS.CHAT_MESSAGES, msgs => {
         store.dispatch(chatMessages(msgs));
     });
 
-    socket.on("chatMessage", msg => {
-        // console.log("message from backend", msg);
-
+    // Listen for new chat messages
+    socket.on(SOCKET_EVENTS.CHAT_MESSAGE, msg => {
         store.dispatch(chatMessage(msg));
     });
 
-    socket.on("onlineUsers", users => {
-        // console.log("users online from backend", users);
+    // Listen for online users updates
+    socket.on(SOCKET_EVENTS.ONLINE_USERS, users => {
         store.dispatch(onlineUsers(users));
     });
 
-    socket.on("userJoinedOrLeft", users => {
+    // Listen for user join/leave events
+    socket.on(SOCKET_EVENTS.USER_JOINED_OR_LEFT, users => {
         store.dispatch(userJoinedOrLeft(users));
     });
 
-    socket.on("privateChatMsgs", msgs => {
-        // console.log("private messages received from backend", msgs);
+    // Listen for private chat messages
+    socket.on(SOCKET_EVENTS.PRIVATE_CHAT_MESSAGES, msgs => {
         store.dispatch(privateChatMessages(msgs));
     });
 
-    socket.on("privateChatMsg", msg => {
-        // console.log("private messages received from backend", msg);
+    // Listen for new private chat messages
+    socket.on(SOCKET_EVENTS.PRIVATE_CHAT_MESSAGE, msg => {
         store.dispatch(privateChatMessage(msg));
     });
-
-    // socket.on("welcome", function(data) {
-    //     console.log(data);
-    //     socket.emit("thanks", {
-    //         message: "Thank you. It is great to be here."
-    //     });
-    // });
 
     return socket;
 }
